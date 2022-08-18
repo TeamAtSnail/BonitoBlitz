@@ -2,7 +2,6 @@
 /// part of the gm0 (w.i.p name) gamemode
 /// - lotuspar, 2022 (github.com/lotuspar)
 /// </summary>
-
 namespace gm0;
 
 /// <summary>
@@ -11,16 +10,16 @@ namespace gm0;
 /// </summary>
 public struct GameEvent {
     public GameEvent(uint uid, uint action, uint var1 = 0, uint var2 = 0) {
-        this.uid = uid;
-        this.action = action;
-        this.var1 = var1;
-        this.var2 = var2;
+        this.Uid = uid;
+        this.Action = action;
+        this.Var1 = var1;
+        this.Var2 = var2;
     }
 
-    public readonly uint uid;
-    public readonly uint action;
-    public uint var1;
-    public uint var2;
+    public readonly uint Uid;
+    public readonly uint Action;
+    public uint Var1;
+    public uint Var2;
 }
 
 /// <summary>
