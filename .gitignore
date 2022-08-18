@@ -20,6 +20,9 @@
 *.opendb
 *.VC.db
 
+# Map outputs
+*.los
+
 # Builds
 *.apk
 *.aab
