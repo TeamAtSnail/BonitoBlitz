@@ -1,34 +1,19 @@
-/// <summary>
-/// part of the gm0 (w.i.p name) gamemode
-/// - lotuspar, 2022 (github.com/lotuspar)
-/// </summary>
+/*
+ * part of the gm0 (w.i.p name) gamemode
+ * - lotuspar, 2022 (github.com/lotuspar)
+ */
 namespace gm0;
 
 /// <summary>
 /// Data for a single in-game event. Can be used as a network packet
-/// var1 & var2 are multi-purpose variables based on the value of action
+/// var1-3 are multi-purpose variables based on the value of action
 /// </summary>
 public struct GameEvent {
     public GameEvent(uint action, uint var1 = 0, uint var2 = 0, uint var3 = 0) {
-		this.Action = action;
-        this.Var1 = var1;
-        this.Var2 = var2;
-        this.Var3 = var3;
-    }
-
-	private uint? _SessionUid = null;
-    /// <summary>
-	/// !! HOLD ON !! Do not set SessionUid manually or things will break!
-	/// Use ServerSession.RegisterEvent to get a SessionUid
-	/// </summary>
-	public uint? SessionUid {
-        get => _SessionUid;
-		set {
-            if ( _SessionUid == null )
-			    _SessionUid = value;
-            else
-				Log.Error( "Attempted to change SessionUid of event with existing SessionUid!" );
-		}
+		Action = action;
+        Var1 = var1;
+        Var2 = var2;
+        Var3 = var3;
     }
     
     public readonly uint Action;
