@@ -40,7 +40,6 @@ public struct GameEvent
 		Var2f = var2;
 		Var3f = var3;
 	}
-    
 
 	public readonly uint Action;
 	public uint Var1;
