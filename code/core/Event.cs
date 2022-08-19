@@ -9,15 +9,24 @@ namespace gm0;
 /// var1 & var2 are multi-purpose variables based on the value of action
 /// </summary>
 public struct GameEvent {
-    public GameEvent(uint uid, uint action, uint var1 = 0, uint var2 = 0, uint var3 = 0) {
-        this.Uid = uid;
-        this.Action = action;
+    public GameEvent(uint action, uint var1 = 0, uint var2 = 0, uint var3 = 0) {
+		this.Action = action;
         this.Var1 = var1;
         this.Var2 = var2;
         this.Var3 = var3;
     }
 
-    public readonly uint Uid;
+	private uint? _SessionUid = null;
+	public uint? SessionUid {
+        get => _SessionUid;
+		set {
+            if ( _SessionUid == null )
+			    _SessionUid = value;
+            else
+				Log.Error( "Attempted to change SessionUid of event with existing SessionUid!" );
+		}
+    }
+    
     public readonly uint Action;
     public uint Var1;
     public uint Var2;
