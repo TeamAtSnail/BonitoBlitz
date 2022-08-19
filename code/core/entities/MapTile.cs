@@ -2,10 +2,9 @@
  * part of the gm0 (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
+namespace gm0;
 using Sandbox;
 using SandboxEditor;
-
-namespace gm0;
 
 /// <summary>
 /// Singular map tile entity; used to denote tile position
@@ -13,17 +12,12 @@ namespace gm0;
 /// </summary>
 [Library( "gm0_map_tile" ), HammerEntity]
 [Title( "Map Tile" ), Category( "Player" ), Icon( "place" )]
+[Description( "Tile for players to stand on" )]
 public class MapTile : Entity
 {
 	/// <summary>
-	/// ID of map tile
+	/// Names of possible tiles to move to
 	/// </summary>
-	[Property( Title = "Map Tile Identifier" )]
-	public string TileId { get; set; }
-
-	/// <summary>
-	/// ID of next map tile to move to
-	/// </summary>
-	[Property( Title = "Next Map Tile" )]
-	public string NextTile { get; set; }
+	[Property( Title = "Next Map Tile(s)" )]
+	public TagList NextTileOptions { get; set; }
 }
