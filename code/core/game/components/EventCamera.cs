@@ -26,12 +26,14 @@ class EventCamera : CameraMode {
 		{
 			// evt: var1=x, var2=y, var3=z
 			serverCameraAngle = new Angles( evt.Var1, evt.Var2, evt.Var3 ); // todo: don't use new Angles here
+			return 0;
 		} );
 
         ClientSession.AddHandler( GameEventAction.CAMERA_SET_POS, 
         ( GameEvent evt ) =>
 		{
 			serverCameraPosition = new Vector3( evt.Var1, evt.Var2, evt.Var3 ); // todo: don't use new Vector here
+			return 0;
 		} );
 
         ClientSession.AddHandler( GameEventAction.CAMERA_SET_FOV, 
@@ -39,6 +41,7 @@ class EventCamera : CameraMode {
 		{
 			// evt: var1=fov
 			serverCameraFieldOfView = evt.Var1;
+			return 0;
 		} );
 	}
 
