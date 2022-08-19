@@ -19,6 +19,29 @@ public struct GameEvent
 		Var3 = var3;
 	}
 
+    public GameEvent( uint action, int var1 = 0, int var2 = 0, int var3 = 0 )
+	{
+		Action = action;
+		Var1 = 0;
+		Var2 = 0;
+		Var3 = 0;
+		Var1i = var1;
+		Var2i = var2;
+		Var3i = var3;
+	}
+
+    public GameEvent( uint action, float var1 = 0, float var2 = 0, float var3 = 0 )
+	{
+		Action = action;
+		Var1 = 0;
+		Var2 = 0;
+		Var3 = 0;
+		Var1f = var1;
+		Var2f = var2;
+		Var3f = var3;
+	}
+    
+
 	public readonly uint Action;
 	public uint Var1;
 	public uint Var2;
