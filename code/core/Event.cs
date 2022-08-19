@@ -34,7 +34,8 @@ public enum GameEventAction : uint {
     /* Game actions */
     /* Camera */
     CAMERA_SET_ANGLE,
-    CAMERA_SET_POS
+    CAMERA_SET_POS,
+    CAMERA_SET_FOV
 }
 
 /// <summary>
@@ -56,5 +57,8 @@ public class GameEventCreator {
     }
 	public static GameEvent SetCameraPos(uint uid, uint x, uint y, uint z) {
         return new GameEvent(uid, (uint) GameEventAction.CAMERA_SET_POS, x, y, z);
+    }
+    public static GameEvent SetCameraFOV(uint uid, uint fov) {
+        return new GameEvent(uid, (uint) GameEventAction.CAMERA_SET_FOV, fov);
     }
 }
