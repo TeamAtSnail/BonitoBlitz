@@ -30,6 +30,11 @@ public static class ServerSession {
 
 	private readonly static List<ServerSessionPlayer> players = new();
 
+	/// <summary>
+	/// Get a ServerSessionPlayer from its client
+	/// </summary>
+	/// <param name="client">Client to compare</param>
+	/// <returns>ServerSessionPlayer or null</returns>
     public static ServerSessionPlayer? GetServerSessionPlayerByClient( Client client ) {
         foreach ( var player in players )
             if ( player.Client == client )
@@ -37,6 +42,11 @@ public static class ServerSession {
 		return null;
 	}
 
+	/// <summary>
+	/// Get a ServerSessionPlayer from its entity
+	/// </summary>
+	/// <param name="entity">Entity to compare</param>
+	/// <returns>ServerSessionPlayer or null</returns>
     public static ServerSessionPlayer? GetServerSessionPlayerByEntity( Entity entity ) {
         foreach ( var player in players )
             if ( player.Client.Pawn == entity )
@@ -44,6 +54,11 @@ public static class ServerSession {
 		return null;
 	}
 
+	/// <summary>
+	/// Get a ServerSessionPlayer from its UID
+	/// </summary>
+	/// <param name="uid">UID to compare</param>
+	/// <returns>ServerSessionPlayer or null</returns>
     public static ServerSessionPlayer? GetServerSessionPlayerByUid( uint uid ) {
         foreach ( var player in players )
             if ( player.Uid == uid )
