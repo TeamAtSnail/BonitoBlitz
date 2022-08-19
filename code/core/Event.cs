@@ -41,7 +41,7 @@ public enum GameEventAction : uint {
 /// <summary>
 /// Class to quickly create event for specific action
 /// </summary>
-public class GameEventCreator {
+public partial class GameEventCreator {
     /// <summary>
     /// Acknowledge processing of a received event
     /// </summary>
@@ -51,14 +51,5 @@ public class GameEventCreator {
     /// <returns>New event</returns>
 	public static GameEvent Acknowledgement(uint uid, uint acknowledgedEventUid = 0, uint status = 0) {
         return new GameEvent(uid, (uint) GameEventAction.ACK, acknowledgedEventUid, status);
-    }
-    public static GameEvent SetCameraAngle(uint uid, uint x, uint y, uint z) {
-        return new GameEvent(uid, (uint) GameEventAction.CAMERA_SET_ANGLE, x, y, z);
-    }
-	public static GameEvent SetCameraPos(uint uid, uint x, uint y, uint z) {
-        return new GameEvent(uid, (uint) GameEventAction.CAMERA_SET_POS, x, y, z);
-    }
-    public static GameEvent SetCameraFOV(uint uid, uint fov) {
-        return new GameEvent(uid, (uint) GameEventAction.CAMERA_SET_FOV, fov);
     }
 }
