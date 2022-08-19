@@ -23,6 +23,18 @@ public struct GameEvent {
 }
 
 /// <summary>
+/// Server-side GameEvent with index / history number
+/// </summary>
+public struct RegisteredGameEvent {
+	public RegisteredGameEvent(uint index, GameEvent evt) {
+		Index = index;
+		Event = evt;
+	}
+	public readonly uint Index;
+	public readonly GameEvent Event;
+}
+
+/// <summary>
 /// Registry of all known events
 /// </summary>
 public enum GameEventAction : uint {
