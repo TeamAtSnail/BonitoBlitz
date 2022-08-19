@@ -153,12 +153,27 @@ public static partial class ClientSession {
     /// </summary>
     /// <param name="actionUid">Event action UID / code</param>
     /// <param name="actionHandlerMethod">Event action handler method</param>
-    public static void AddHandler( GameEventAction actionUid, Action<GameEvent> actionHandlerMethod ) {
+	/// <param name="checkForSameAction">Whether or not handler should be added if one exists for that action</param>
+    public static void AddHandler( 
+		GameEventAction actionUid, 
+		Action<GameEvent> actionHandlerMethod, 
+		bool checkForSameAction = true
+	) {
         if ( actionHandlerMethod == null )
         {
 			Log.Error( "Attempted to add null handler method" );
 			return;
 		}
+
+		// Check for existing handler if required
+		if ( checkForSameAction )
+			foreach ( var handler in handlers )
+            	if ( handler.Key == actionUid )
+                {
+					Log.Warning( $"Tried to add handler for already handled action {actionUid}" );
+					return;
+				}
+
 		handlers.Add( new( actionUid, actionHandlerMethod ) );
 	}
 
