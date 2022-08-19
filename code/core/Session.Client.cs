@@ -1,7 +1,7 @@
-/// <summary>
-/// part of the gm0 (w.i.p name) gamemode
-/// - lotuspar, 2022 (github.com/lotuspar)
-/// </summary>
+/*
+ * part of the gm0 (w.i.p name) gamemode
+ * - lotuspar, 2022 (github.com/lotuspar)
+ */
 namespace gm0;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ using Sandbox;
 /// Data for a single client-side session
 /// </summary>
 public static partial class ClientSession {
-	private readonly static List<KeyValuePair<GameEventAction, Action<GameEvent>>> handlers = new();
+	private readonly static List<KeyValuePair<GameEventAction, Func<GameEvent, uint>>> handlers = new();
 
-	private readonly static List<GameEvent> queue = new();
+	private readonly static List<RegisteredGameEvent> queue = new();
 
 	/// <summary>
 	/// Acknowledge event from server
@@ -28,11 +28,11 @@ public static partial class ClientSession {
     /// Add new handler for event action
     /// </summary>
     /// <param name="actionUid">Event action UID / code</param>
-    /// <param name="actionHandlerMethod">Event action handler method</param>
+    /// <param name="actionHandlerMethod">Event action handler method (input GameEvent, output uint as status code)</param>
 	/// <param name="replaceExistingAction">Whether or not existing handler should be replaced (if it exists)</param>
     public static void AddHandler( 
 		GameEventAction actionUid, 
-		Action<GameEvent> actionHandlerMethod, 
+		Func<GameEvent, uint> actionHandlerMethod, 
 		bool replaceExistingAction = true
 	) {
         if ( actionHandlerMethod == null )
@@ -54,14 +54,14 @@ public static partial class ClientSession {
 	}
 
 	[ClientRpc]
-    public static void HandleEvent( GameEvent evt ) {
+    public static void HandleEvent( RegisteredGameEvent evt ) {
         foreach ( var handler in handlers )
-            if ( (uint)handler.Key == evt.Action )
-                handler.Value( evt );
+            if ( (uint)handler.Key == evt.Event.Action )
+                Acknowledge( evt.Index, handler.Value( evt.Event ) );
 	}
 
     [ClientRpc]
-    public static void AddToQueue( GameEvent evt ) {
+    public static void AddToQueue( RegisteredGameEvent evt ) {
 		queue.Add( evt );
 	}
 
