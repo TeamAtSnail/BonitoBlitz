@@ -1,32 +1,31 @@
-/// <summary>
-/// part of the gm0 (w.i.p name) gamemode
-/// - lotuspar, 2022 (github.com/lotuspar)
-/// </summary>
+/*
+ * part of the gm0 (w.i.p name) gamemode
+ * - lotuspar, 2022 (github.com/lotuspar)
+ */
 namespace gm0;
-using System;
 using System.Collections.Generic;
 using Sandbox;
+
+/// <summary>
+/// Data for a single player stored server-side
+/// Should be used by UID so the player data can move between clients freely
+/// </summary>
+public struct ServerSessionPlayer {
+	public ServerSessionPlayer(uint uid, Client client) {
+		this.Uid = uid;
+		this.Client = client;
+	}
+
+	public readonly uint Uid;
+	public Client Client;
+	public uint? LastAcknowledgedEvent = null; // Last event index to be acknowledged
+}
 
 /// <summary>
 /// Data for a single server-side session
 /// </summary>
 public static class ServerSession {
-    /// <summary>
-    /// Data for a single player stored server-side
-    /// Should be used by UID so the player data can move between clients freely
-    /// </summary>
-    public struct ServerSessionPlayer {
-        public ServerSessionPlayer(uint uid, Client client) {
-			this.Uid = uid;
-			this.Client = client;
-		}
-
-		public readonly uint Uid;
-		public Client Client;
-		public uint? LastAcknowledgedEvent = null; // Last event UID to be acknowledged
-	}
-
-	private readonly static List<GameEvent> events = new();
+	private readonly static List<RegisteredGameEvent> events = new();
 
 	private readonly static List<ServerSessionPlayer> players = new();
 
@@ -85,25 +84,51 @@ public static class ServerSession {
     }
 
 	/// <summary>
-	/// Broadcast game event to all players and if required save it to history (default on)
+	/// Register event with server-side session
+	/// </summary>
+	/// <param name="evt">Event to register</param>
+	/// <returns>RegisteredGameEvent</returns>
+	public static RegisteredGameEvent RegisterEvent( GameEvent evt ) {
+		var registeredGameEvent = new RegisteredGameEvent(
+			(uint)events.Count,
+			evt
+		);
+
+		events.Add( registeredGameEvent );
+		return registeredGameEvent;
+	}
+
+	/// <summary>
+	/// Broadcast game event to all players after registering it
+	/// </summary>
+	/// <param name="evt">Event to register and broadcast</param>
+	public static void BroadcastEvent( GameEvent evt ) {
+		ClientSession.HandleEvent( To.Everyone, RegisterEvent( evt ) );
+	}
+
+	/// <summary>
+	/// Broadcast registered game event to all players
 	/// </summary>
 	/// <param name="evt">Event to broadcast</param>
-    /// <param name="saveToHistory">Whether or not the event should be saved to history</param>   
-	public static void BroadcastEvent( GameEvent evt, bool saveToHistory = true ) {
-        if ( saveToHistory )
-		    events.Add( evt );
+	public static void BroadcastEvent( RegisteredGameEvent evt ) {
 		ClientSession.HandleEvent( To.Everyone, evt );
 	}
 
+	/// <summary>
+    /// Register and add event to player event queue
+    /// </summary>
+    /// <param name="evt">Event to register and add</param>
+    /// <param name="sessionPlayer">Player with event queue</param>
+    public static void AddToPlayerEventQueue( ServerSessionPlayer sessionPlayer, GameEvent evt ) {
+        ClientSession.AddToQueue( To.Single( sessionPlayer.Client ), RegisterEvent( evt ) );
+	}
+
     /// <summary>
-    /// Add event to player event queue and if required save it to history (default off)
+    /// Add registered event to player event queue
     /// </summary>
     /// <param name="evt">Event to add</param>
     /// <param name="sessionPlayer">Player with event queue</param>
-    /// <param name="saveToHistory">Whether or not the event should be saved to history</param>   
-    public static void AddToPlayerEventQueue( ServerSessionPlayer sessionPlayer, GameEvent evt, bool saveToHistory = false ) {
-        if ( saveToHistory )
-		    events.Add( evt );
+    public static void AddToPlayerEventQueue( ServerSessionPlayer sessionPlayer, RegisteredGameEvent evt ) {
         ClientSession.AddToQueue( To.Single( sessionPlayer.Client ), evt );
 	}
 
