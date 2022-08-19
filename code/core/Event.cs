@@ -9,17 +9,19 @@ namespace gm0;
 /// var1 & var2 are multi-purpose variables based on the value of action
 /// </summary>
 public struct GameEvent {
-    public GameEvent(uint uid, uint action, uint var1 = 0, uint var2 = 0) {
+    public GameEvent(uint uid, uint action, uint var1 = 0, uint var2 = 0, uint var3 = 0) {
         this.Uid = uid;
         this.Action = action;
         this.Var1 = var1;
         this.Var2 = var2;
+        this.Var3 = var3;
     }
 
     public readonly uint Uid;
     public readonly uint Action;
     public uint Var1;
     public uint Var2;
+    public uint Var3;
 }
 
 /// <summary>
@@ -27,7 +29,7 @@ public struct GameEvent {
 /// </summary>
 public enum GameEventAction : uint {
     INVALID = 0,
-    ACK = 1
+    ACK,
 }
 
 /// <summary>
