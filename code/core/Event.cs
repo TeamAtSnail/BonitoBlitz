@@ -3,6 +3,7 @@
  * - lotuspar, 2022 (github.com/lotuspar)
  */
 namespace gm0;
+using System;
 
 /// <summary>
 /// Data for a single in-game event. Can be used as a network packet
@@ -22,6 +23,42 @@ public struct GameEvent
 	public uint Var1;
 	public uint Var2;
 	public uint Var3;
+
+	public int Var1i
+	{
+		get => (int) Var1;
+		set => Var1 = (uint)value;
+	}
+
+    public int Var2i
+	{
+		get => (int) Var2;
+		set => Var2 = (uint)value;
+	}
+
+    public int Var3i
+	{
+		get => (int) Var3;
+		set => Var3 = (uint)value;
+	}
+
+    public float Var1f
+	{
+		get => BitConverter.ToSingle(BitConverter.GetBytes(Var1), 0);
+		set => Var1 = BitConverter.ToUInt32(BitConverter.GetBytes(value), 0);
+	}
+
+    public float Var2f
+	{
+		get => BitConverter.ToSingle(BitConverter.GetBytes(Var2), 0);
+		set => Var2 = BitConverter.ToUInt32(BitConverter.GetBytes(value), 0);
+	}
+
+    public float Var3f
+	{
+		get => BitConverter.ToSingle(BitConverter.GetBytes(Var3), 0);
+		set => Var3 = BitConverter.ToUInt32(BitConverter.GetBytes(value), 0);
+	}
 }
 
 /// <summary>
