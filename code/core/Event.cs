@@ -39,17 +39,6 @@ public enum GameEventAction : uint {
 }
 
 /// <summary>
-/// Class to quickly create event for specific action
+/// Class to quickly create events for specific actions
 /// </summary>
-public partial class GameEventCreator {
-    /// <summary>
-    /// Acknowledge processing of a received event
-    /// </summary>
-    /// <param name="uid">New event UID</param>
-    /// <param name="acknowledgedEventUid">Received event UID</param>
-    /// <param name="status">Status code to provide back (0 always OK)</param>
-    /// <returns>New event</returns>
-	public static GameEvent Acknowledgement(uint uid, uint acknowledgedEventUid = 0, uint status = 0) {
-        return new GameEvent(uid, (uint) GameEventAction.ACK, acknowledgedEventUid, status);
-    }
-}
+public partial class GameEventCreator {}
