@@ -30,6 +30,11 @@ public struct GameEvent {
 public enum GameEventAction : uint {
     INVALID = 0,
     ACK,
+
+    /* Game actions */
+    /* Camera */
+    CAMERA_SET_ANGLE,
+    CAMERA_SET_POS
 }
 
 /// <summary>
@@ -45,5 +50,11 @@ public class GameEventCreator {
     /// <returns>New event</returns>
 	public static GameEvent Acknowledgement(uint uid, uint acknowledgedEventUid = 0, uint status = 0) {
         return new GameEvent(uid, (uint) GameEventAction.ACK, acknowledgedEventUid, status);
+    }
+    public static GameEvent SetCameraAngle(uint uid, uint x, uint y, uint z) {
+        return new GameEvent(uid, (uint) GameEventAction.CAMERA_SET_ANGLE, x, y, z);
+    }
+	public static GameEvent SetCameraPos(uint uid, uint x, uint y, uint z) {
+        return new GameEvent(uid, (uint) GameEventAction.CAMERA_SET_POS, x, y, z);
     }
 }
