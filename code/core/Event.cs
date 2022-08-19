@@ -17,6 +17,10 @@ public struct GameEvent {
     }
 
 	private uint? _SessionUid = null;
+    /// <summary>
+	/// !! HOLD ON !! Do not set SessionUid manually or things will break!
+	/// Use ServerSession.RegisterEvent to get a SessionUid
+	/// </summary>
 	public uint? SessionUid {
         get => _SessionUid;
 		set {
