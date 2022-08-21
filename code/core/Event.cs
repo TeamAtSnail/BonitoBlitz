@@ -107,7 +107,7 @@ public enum GameEventAction : uint
 
 	/* Game actions */
 	/* Camera */
-	CAMERA_SET_ANGLE,
+	CAMERA_SET_ANG,
 	CAMERA_SET_POS,
 	CAMERA_SET_FOV
 }

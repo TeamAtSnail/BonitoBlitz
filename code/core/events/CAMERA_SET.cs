@@ -8,11 +8,11 @@ public partial class GameEventCreator
 {
 	public static GameEvent SetCameraAngle( Angles angles )
 	{
-		return new GameEvent( (uint)GameEventAction.CAMERA_SET_ANGLE, angles.pitch, angles.yaw, angles.roll );
+		return new GameEvent( (uint)GameEventAction.CAMERA_SET_ANG, angles.pitch, angles.yaw, angles.roll );
 	}
 	public static GameEvent SetCameraAngle( float pitch, float yaw, float roll )
 	{
-		return new GameEvent( (uint)GameEventAction.CAMERA_SET_ANGLE, pitch, yaw, roll );
+		return new GameEvent( (uint)GameEventAction.CAMERA_SET_ANG, pitch, yaw, roll );
 	}
 	public static GameEvent SetCameraPos( Vector3 position )
 	{

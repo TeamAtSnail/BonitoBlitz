@@ -22,7 +22,7 @@ class EventCamera : CameraMode
 	{
 		/* Handle GameEventActions */
 		Log.Info( "GameEventCamera constructor called!" );
-		ClientSession.AddHandler( GameEventAction.CAMERA_SET_ANGLE,
+		ClientSession.AddHandler( GameEventAction.CAMERA_SET_ANG,
 		( GameEvent evt ) =>
 		{
 			// evt: var1=x, var2=y, var3=z
