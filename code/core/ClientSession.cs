@@ -16,6 +16,6 @@ public static partial class ClientSession
 	/// <param name="status">Event status code</param>
 	public static void Acknowledge( uint eventUid, uint status )
 	{
-		ServerSession.HandleEventCcmdShim( GameEventCreator.Acknowledge( status, eventUid ) );
+		ServerSession.HandleEventCcmdShim( (uint) GameEventAction.ACK, status, eventUid, 0 );
 	}
 }

@@ -93,8 +93,8 @@ public static partial class ServerSession
 	/// </summary>
 	/// <param name="evt">Event</param>
 	[ConCmd.Server]
-	public static void HandleEventCcmdShim( GameEvent evt )
+	public static void HandleEventCcmdShim( uint action, uint var1, uint var2, uint var3 )
 	{
-		HandleEvent( evt, ConsoleSystem.Caller );
+		HandleEvent( new GameEvent( action, var1, var2, var3 ), ConsoleSystem.Caller );
 	}
 }
