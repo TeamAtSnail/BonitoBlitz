@@ -12,16 +12,12 @@ using Sandbox;
 /// </summary>
 public static partial class ClientSession
 {
-	private readonly static List<KeyValuePair<GameEventAction, Func<GameEvent, uint>>> handlers = new();
+	private readonly static List<KeyValuePair<GameEventAction, Func<GameEvent, uint>>> foreverHandlers = new();
+	private readonly static List<KeyValuePair<GameEventAction, Func<GameEvent, uint>>> singleUseHandlers = new();
 	private readonly static List<RegisteredGameEvent> queue = new();
 
-	/// <summary>
-	/// Add new handler for event action
-	/// </summary>
-	/// <param name="actionUid">Event action UID / code</param>
-	/// <param name="actionHandlerMethod">Event action handler method (input GameEvent, output uint as status code)</param>
-	/// <param name="replaceExistingAction">Whether or not existing handler should be replaced (if it exists)</param>
-	public static void AddHandler(
+	private static void AddHandler(
+		List<KeyValuePair<GameEventAction, Func<GameEvent, uint>>> list,
 		GameEventAction actionUid,
 		Func<GameEvent, uint> actionHandlerMethod,
 		bool replaceExistingAction = true
@@ -35,22 +31,61 @@ public static partial class ClientSession
 
 		// Check for existing handler if required
 		if ( replaceExistingAction )
-			for ( int i = 0; i < handlers.Count; i++ )
-				if ( handlers[i].Key == actionUid )
+			for ( int i = 0; i < list.Count; i++ )
+				if ( list[i].Key == actionUid )
 				{
 					Log.Warning( $"Replacing handler for already handled action {actionUid}" );
-					handlers.RemoveAt( i );
+					list.RemoveAt( i );
 				}
 
-		handlers.Add( new( actionUid, actionHandlerMethod ) );
+		list.Add( new( actionUid, actionHandlerMethod ) );
+	}
+
+	/// <summary>
+	/// Add new forever handler for event action
+	/// </summary>
+	/// <param name="actionUid">Event action UID / code</param>
+	/// <param name="actionHandlerMethod">Event action handler method (input GameEvent, output uint as status code)</param>
+	/// <param name="replaceExistingAction">Whether or not existing handler should be replaced (if it exists)</param>
+	public static void AddForeverHandler(
+		GameEventAction actionUid,
+		Func<GameEvent, uint> actionHandlerMethod,
+		bool replaceExistingAction = true
+	)
+	{
+		AddHandler( foreverHandlers, actionUid, actionHandlerMethod, replaceExistingAction );
+	}
+
+	/// <summary>
+	/// Add new single use handler for event action
+	/// </summary>
+	/// <param name="actionUid">Event action UID / code</param>
+	/// <param name="actionHandlerMethod">Event action handler method (input GameEvent, output uint as status code)</param>
+	/// <param name="replaceExistingAction">Whether or not existing handler should be replaced (if it exists)</param>
+	public static void AddSingleUseHandler(
+		GameEventAction actionUid,
+		Func<GameEvent, uint> actionHandlerMethod,
+		bool replaceExistingAction = true
+	)
+	{
+		AddHandler( singleUseHandlers, actionUid, actionHandlerMethod, replaceExistingAction );
 	}
 
 	[ClientRpc]
 	public static void HandleEvent( RegisteredGameEvent evt )
 	{
-		foreach ( var handler in handlers )
+		foreach ( var handler in foreverHandlers )
 			if ( (uint)handler.Key == evt.Event.Action )
 				Acknowledge( evt.Index, handler.Value( evt.Event ) );
+
+		for ( int i = singleUseHandlers.Count - 1; i >= 0; i-- )
+		{
+			if ( (uint)singleUseHandlers[i].Key == evt.Event.Action )
+			{
+				singleUseHandlers[i].Value( evt.Event );
+				singleUseHandlers.RemoveAt( i );
+			}
+		}
 	}
 
 	[ClientRpc]
