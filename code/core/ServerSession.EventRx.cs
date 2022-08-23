@@ -50,10 +50,7 @@ public static partial class ServerSession
 		GameEventAction actionUid,
 		Func<GameEvent, Client, uint> actionHandlerMethod,
 		bool replaceExistingAction = true
-	)
-	{
-		AddHandler( foreverHandlers, actionUid, actionHandlerMethod, replaceExistingAction );
-	}
+	) => AddHandler( foreverHandlers, actionUid, actionHandlerMethod, replaceExistingAction );
 
 	/// <summary>
 	/// Add new single use handler for event action
@@ -65,10 +62,7 @@ public static partial class ServerSession
 		GameEventAction actionUid,
 		Func<GameEvent, Client, uint> actionHandlerMethod,
 		bool replaceExistingAction = true
-	)
-	{
-		AddHandler( singleUseHandlers, actionUid, actionHandlerMethod, replaceExistingAction );
-	}
+	) => AddHandler( singleUseHandlers, actionUid, actionHandlerMethod, replaceExistingAction );
 
 
 	/// <summary>

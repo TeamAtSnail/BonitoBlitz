@@ -22,7 +22,7 @@ class EventCamera : CameraMode
 	{
 		/* Handle GameEventActions */
 		Log.Info( "GameEventCamera constructor called!" );
-		ClientSession.AddHandler( GameEventAction.CAMERA_SET_ANG,
+		ClientSession.AddForeverHandler( GameEventAction.CAMERA_SET_ANG,
 		( GameEvent evt ) =>
 		{
 			// evt: var1=x, var2=y, var3=z
@@ -30,14 +30,14 @@ class EventCamera : CameraMode
 			return 0;
 		} );
 
-		ClientSession.AddHandler( GameEventAction.CAMERA_SET_POS,
+		ClientSession.AddForeverHandler( GameEventAction.CAMERA_SET_POS,
 		( GameEvent evt ) =>
 		{
 			serverCameraPosition = new Vector3( evt.Var1f, evt.Var2f, evt.Var3f ); // todo: don't use new Vector here
 			return 0;
 		} );
 
-		ClientSession.AddHandler( GameEventAction.CAMERA_SET_FOV,
+		ClientSession.AddForeverHandler( GameEventAction.CAMERA_SET_FOV,
 		( GameEvent evt ) =>
 		{
 			// evt: var1=fov
