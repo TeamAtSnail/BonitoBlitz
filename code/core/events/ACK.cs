@@ -6,8 +6,8 @@ namespace gm0;
 
 public partial class GameEventCreator
 {
-	public static GameEvent Acknowledge( uint status )
+	public static GameEvent Acknowledge( uint status, uint eventUid )
 	{
-		return new GameEvent( (uint)GameEventAction.ACK, status );
+		return new GameEvent( (uint)GameEventAction.ACK, status, eventUid );
 	}
 }
