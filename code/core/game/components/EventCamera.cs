@@ -22,28 +22,36 @@ class EventCamera : CameraMode
 	{
 		/* Handle GameEventActions */
 		Log.Info( "GameEventCamera constructor called!" );
-		ClientSession.AddForeverHandler( GameEventAction.CAMERA_SET_ANG,
-		( GameEvent evt ) =>
+		if ( Host.IsClient )
 		{
-			// evt: var1=x, var2=y, var3=z
-			serverCameraAngle = new Angles( evt.Var1f, evt.Var2f, evt.Var3f ); // todo: don't use new Angles here
-			return 0;
-		} );
+			Gamemode0.Session.AddForeverHandler( new SessionEventHandler<SessionIncomingMessage>(
+				GameEventAction.CAMERA_SET_ANG, "_EventCamera_CAMERA_SET_ANG",
+				( SessionIncomingMessage message ) =>
+				{
+					// evt: var1=x, var2=y, var3=z
+					serverCameraAngle = new Angles( message.Event.Var1f, message.Event.Var2f, message.Event.Var3f ); // todo: don't use new Angles here
+					return 0;
+				} )
+			);
 
-		ClientSession.AddForeverHandler( GameEventAction.CAMERA_SET_POS,
-		( GameEvent evt ) =>
-		{
-			serverCameraPosition = new Vector3( evt.Var1f, evt.Var2f, evt.Var3f ); // todo: don't use new Vector here
-			return 0;
-		} );
+			Gamemode0.Session.AddForeverHandler( new SessionEventHandler<SessionIncomingMessage>(
+				GameEventAction.CAMERA_SET_POS, "_EventCamera_CAMERA_SET_POS",
+				( SessionIncomingMessage message ) =>
+				{
+					serverCameraPosition = new Vector3( message.Event.Var1f, message.Event.Var2f, message.Event.Var3f ); // todo: don't use new Vector here
+					return 0;
+				} )
+			);
 
-		ClientSession.AddForeverHandler( GameEventAction.CAMERA_SET_FOV,
-		( GameEvent evt ) =>
-		{
-			// evt: var1=fov
-			serverCameraFieldOfView = evt.Var1;
-			return 0;
-		} );
+			Gamemode0.Session.AddForeverHandler( new SessionEventHandler<SessionIncomingMessage>(
+				GameEventAction.CAMERA_SET_POS, "_EventCamera_CAMERA_SET_POS",
+				( SessionIncomingMessage message ) =>
+				{
+					serverCameraFieldOfView = message.Event.Var1;
+					return 0;
+				} )
+			);
+		}
 	}
 
 	public override void Update()
