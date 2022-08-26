@@ -39,7 +39,13 @@ public struct SessionIncomingMessage
 	}
 }
 
-public abstract class SessionReceiver
+public abstract class EventReceiver
+{
+	protected abstract void PostHandleForeverEvent( SessionIncomingMessage handler, uint statusCode );
+	protected abstract void PostHandleSingleUseEvent( SessionIncomingMessage handler, uint statusCode );
+}
+
+public partial class Session : EventReceiver
 {
 	protected readonly List<SessionEventHandler<SessionIncomingMessage>> foreverHandlers = new();
 	protected readonly List<SessionEventHandler<SessionIncomingMessage>> singleUseHandlers = new();
@@ -103,7 +109,4 @@ public abstract class SessionReceiver
 			}
 		}
 	}
-
-	protected abstract void PostHandleForeverEvent( SessionIncomingMessage handler, uint statusCode );
-	protected abstract void PostHandleSingleUseEvent( SessionIncomingMessage handler, uint statusCode );
 }

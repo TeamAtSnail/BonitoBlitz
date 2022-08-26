@@ -5,14 +5,15 @@
 namespace gm0;
 using Sandbox;
 
-public partial class Session : SessionReceiver
+public partial class Session
 {
 	protected override void PostHandleForeverEvent( SessionIncomingMessage handler, uint statusCode )
 	{
-		if ( Host.IsClient && handler.Event.Action != GameEventAction.ACK  )
+		if ( Host.IsClient && handler.Event.Action != GameEventAction.ACK )
 			SessionNetworking.SendToServer( GameEventCreator.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
 	}
-	protected override void PostHandleSingleUseEvent( SessionIncomingMessage handler, uint statusCode ) { 
+	protected override void PostHandleSingleUseEvent( SessionIncomingMessage handler, uint statusCode )
+	{
 		if ( Host.IsClient && handler.Event.Action != GameEventAction.ACK )
 			SessionNetworking.SendToServer( GameEventCreator.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
 	}
