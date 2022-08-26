@@ -51,18 +51,24 @@ public struct RegisteredPlayer
 		if ( message.Client != ActiveClient )
 			return 2;
 
+		uint eventIndex = message.Event.Var1;
+		uint statusCode = message.Event.Var2;
+
+		if ( statusCode != 0 )
+			Log.Warning( $"Received non-zero status code from client for event {eventIndex}, code {statusCode}" );
+
 		for ( int i = Queue.Count - 1; i >= 0; i-- )
 		{
-			if ( Queue[i].Index == message.RegistryIndex )
+			if ( Queue[i].Index == eventIndex )
 			{
-				lastAcknowledgedEvent = message.RegistryIndex;
+				lastAcknowledgedEvent = eventIndex;
 				waitingForResponse = false;
 				Queue.RemoveAt( i );
 				SendNextInQueue();
 				return 0;
 			}
 		}
-		Log.Error( $"Event {message.RegistryIndex} acknowledged by client not found in queue!" );
+		Log.Error( $"Event {eventIndex} acknowledged by client not found in queue!" );
 		return 1;
 	}
 
