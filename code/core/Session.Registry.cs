@@ -40,11 +40,11 @@ public struct RegisteredPlayer
 	public readonly uint Index;
 	public readonly Sandbox.Client? ActiveClient;
 	public readonly List<RegisteredGameEvent> Queue = new();
-	private uint? _LastAcknowledgedEvent = null;
-	public uint? LastAcknowledgedEvent => _LastAcknowledgedEvent;
+	private uint? lastAcknowledgedEvent = null;
+	public uint? LastAcknowledgedEvent => lastAcknowledgedEvent;
 
-	private bool _WaitingForResponse = false;
-	public bool WaitingForResponse => _WaitingForResponse;
+	private bool waitingForResponse = false;
+	public bool WaitingForResponse => waitingForResponse;
 
 	public uint HandleEventAcknowledged( SessionIncomingMessage message )
 	{
@@ -55,8 +55,8 @@ public struct RegisteredPlayer
 		{
 			if ( Queue[i].Index == message.RegistryIndex )
 			{
-				_LastAcknowledgedEvent = message.RegistryIndex;
-				_WaitingForResponse = false;
+				lastAcknowledgedEvent = message.RegistryIndex;
+				waitingForResponse = false;
 				Queue.RemoveAt( i );
 				SendNextInQueue();
 				return 0;
@@ -68,20 +68,20 @@ public struct RegisteredPlayer
 
 	public void SendNextInQueue()
 	{
-		if ( _WaitingForResponse )
+		if ( waitingForResponse )
 			return;
 
 		if ( Queue.Count == 0 )
 			return;
 
 		var @event = Queue.Last();
-		if ( @event.Index == _LastAcknowledgedEvent )
+		if ( @event.Index == lastAcknowledgedEvent )
 		{
 			Log.Error( $"Attempted to send already sent event {@event.Index}" );
 			return;
 		}
 
-		_WaitingForResponse = true;
+		waitingForResponse = true;
 		SessionNetworking.SendToClient( ActiveClient, @event );
 	}
 }
