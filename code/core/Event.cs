@@ -19,7 +19,7 @@ public struct GameEvent
 		Var3 = var3;
 	}
 
-    public GameEvent( uint action, int var1 = 0, int var2 = 0, int var3 = 0 )
+	public GameEvent( uint action, int var1 = 0, int var2 = 0, int var3 = 0 )
 	{
 		Action = action;
 		Var1 = 0;
@@ -30,7 +30,7 @@ public struct GameEvent
 		Var3i = var3;
 	}
 
-    public GameEvent( GameEventAction action, float var1 = 0, float var2 = 0, float var3 = 0 )
+	public GameEvent( GameEventAction action, float var1 = 0, float var2 = 0, float var3 = 0 )
 	{
 		_Action = (uint)action;
 		Var1 = 0;
@@ -49,38 +49,38 @@ public struct GameEvent
 	public GameEventAction Action => (GameEventAction)_Action;
 	public int Var1i
 	{
-		get => (int) Var1;
+		get => (int)Var1;
 		set => Var1 = (uint)value;
 	}
 
-    public int Var2i
+	public int Var2i
 	{
-		get => (int) Var2;
+		get => (int)Var2;
 		set => Var2 = (uint)value;
 	}
 
-    public int Var3i
+	public int Var3i
 	{
-		get => (int) Var3;
+		get => (int)Var3;
 		set => Var3 = (uint)value;
 	}
 
-    public float Var1f
+	public float Var1f
 	{
-		get => BitConverter.ToSingle(BitConverter.GetBytes(Var1), 0);
-		set => Var1 = BitConverter.ToUInt32(BitConverter.GetBytes(value), 0);
+		get => BitConverter.ToSingle( BitConverter.GetBytes( Var1 ), 0 );
+		set => Var1 = BitConverter.ToUInt32( BitConverter.GetBytes( value ), 0 );
 	}
 
-    public float Var2f
+	public float Var2f
 	{
-		get => BitConverter.ToSingle(BitConverter.GetBytes(Var2), 0);
-		set => Var2 = BitConverter.ToUInt32(BitConverter.GetBytes(value), 0);
+		get => BitConverter.ToSingle( BitConverter.GetBytes( Var2 ), 0 );
+		set => Var2 = BitConverter.ToUInt32( BitConverter.GetBytes( value ), 0 );
 	}
 
-    public float Var3f
+	public float Var3f
 	{
-		get => BitConverter.ToSingle(BitConverter.GetBytes(Var3), 0);
-		set => Var3 = BitConverter.ToUInt32(BitConverter.GetBytes(value), 0);
+		get => BitConverter.ToSingle( BitConverter.GetBytes( Var3 ), 0 );
+		set => Var3 = BitConverter.ToUInt32( BitConverter.GetBytes( value ), 0 );
 	}
 }
 
