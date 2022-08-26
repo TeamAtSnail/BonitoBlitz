@@ -30,9 +30,9 @@ public struct GameEvent
 		Var3i = var3;
 	}
 
-    public GameEvent( uint action, float var1 = 0, float var2 = 0, float var3 = 0 )
+    public GameEvent( GameEventAction action, float var1 = 0, float var2 = 0, float var3 = 0 )
 	{
-		Action = action;
+		_Action = (uint)action;
 		Var1 = 0;
 		Var2 = 0;
 		Var3 = 0;
@@ -41,11 +41,12 @@ public struct GameEvent
 		Var3f = var3;
 	}
 
-	public readonly uint Action;
+	private readonly uint _Action;
 	public uint Var1;
 	public uint Var2;
 	public uint Var3;
 
+	public GameEventAction Action => (GameEventAction)_Action;
 	public int Var1i
 	{
 		get => (int) Var1;
@@ -84,26 +85,13 @@ public struct GameEvent
 }
 
 /// <summary>
-/// Server-side GameEvent with index / history number
-/// </summary>
-public struct RegisteredGameEvent
-{
-	public RegisteredGameEvent( uint index, GameEvent evt )
-	{
-		Index = index;
-		Event = evt;
-	}
-	public readonly uint Index;
-	public readonly GameEvent Event;
-}
-
-/// <summary>
 /// Registry of all known events
 /// </summary>
 public enum GameEventAction : uint
 {
 	INVALID = 0,
 	ACK,
+	UPDATE,
 
 	/* Game actions */
 	/* Camera */
