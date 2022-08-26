@@ -24,7 +24,7 @@ class EventCamera : CameraMode
 		Log.Info( "GameEventCamera constructor called!" );
 		if ( Host.IsClient )
 		{
-			Gamemode0.Session.AddForeverHandler( new SessionEventHandler<SessionIncomingMessage>(
+			Gamemode0.Session.AddForeverHandler( new(
 				GameEventAction.CAMERA_SET_ANG, "_EventCamera_CAMERA_SET_ANG",
 				( SessionIncomingMessage message ) =>
 				{
@@ -34,7 +34,7 @@ class EventCamera : CameraMode
 				} )
 			);
 
-			Gamemode0.Session.AddForeverHandler( new SessionEventHandler<SessionIncomingMessage>(
+			Gamemode0.Session.AddForeverHandler( new(
 				GameEventAction.CAMERA_SET_POS, "_EventCamera_CAMERA_SET_POS",
 				( SessionIncomingMessage message ) =>
 				{
@@ -43,7 +43,7 @@ class EventCamera : CameraMode
 				} )
 			);
 
-			Gamemode0.Session.AddForeverHandler( new SessionEventHandler<SessionIncomingMessage>(
+			Gamemode0.Session.AddForeverHandler( new(
 				GameEventAction.CAMERA_SET_POS, "_EventCamera_CAMERA_SET_POS",
 				( SessionIncomingMessage message ) =>
 				{
