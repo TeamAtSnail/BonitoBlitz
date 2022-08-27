@@ -88,7 +88,7 @@ public struct RegisteredClient
 		}
 
 		waitingForResponse = true;
-		SessionNetworking.SendToClient( ActiveClient, @event );
+		CoreNetworking.SendToClient( ActiveClient, @event );
 	}
 }
 

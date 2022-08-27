@@ -10,7 +10,7 @@ public partial class Session
 	protected override void PostHandleForeverEvent( SessionIncomingMessage handler, uint statusCode )
 	{
 		if ( Host.IsClient && handler.Event.Action != GameEventAction.ACK )
-			SessionNetworking.SendToServer( GameEventCreator.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
+			CoreNetworking.SendToServer( GameEventCreator.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
 	}
 	protected override void PostHandleSingleUseEvent( SessionIncomingMessage handler, uint statusCode )
 	{
