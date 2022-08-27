@@ -127,7 +127,7 @@ public partial class Session
 	/// </summary>
 	/// <param name="client">Client</param>
 	/// <returns>RegisteredPlayer</returns>
-	public IndexedClient GetRegisteredPlayer( Sandbox.Client client )
+	public IndexedClient GetIndexedClient( Sandbox.Client client )
 	{
 		IndexedClient? player = null;
 		for ( int i = clientRegistry.Count - 1; i >= 0; i-- )
