@@ -29,6 +29,7 @@ class EventCamera : CameraMode
 				( SessionIncomingMessage message ) =>
 				{
 					// evt: var1=x, var2=y, var3=z
+					Log.Info( $"{message.Event.Var1f}, {message.Event.Var2f}, {message.Event.Var3f}" );
 					serverCameraAngle = new Angles( message.Event.Var1f, message.Event.Var2f, message.Event.Var3f ); // todo: don't use new Angles here
 					return 0;
 				} )
