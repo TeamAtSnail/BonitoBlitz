@@ -25,7 +25,7 @@ class EventCamera : CameraMode
 		if ( Host.IsClient )
 		{
 			Gamemode0.Session.AddForeverHandler( new(
-				GameEventAction.CAMERA_SET_ANG, "_EventCamera_CAMERA_SET_ANG",
+				Events.ActionCode.CAMERA_SET_ANG, "_EventCamera_CAMERA_SET_ANG",
 				( SessionIncomingMessage message ) =>
 				{
 					// evt: var1=x, var2=y, var3=z
@@ -35,7 +35,7 @@ class EventCamera : CameraMode
 			);
 
 			Gamemode0.Session.AddForeverHandler( new(
-				GameEventAction.CAMERA_SET_POS, "_EventCamera_CAMERA_SET_POS",
+				Events.ActionCode.CAMERA_SET_POS, "_EventCamera_CAMERA_SET_POS",
 				( SessionIncomingMessage message ) =>
 				{
 					serverCameraPosition = new Vector3( message.Event.Var1f, message.Event.Var2f, message.Event.Var3f ); // todo: don't use new Vector here
@@ -44,7 +44,7 @@ class EventCamera : CameraMode
 			);
 
 			Gamemode0.Session.AddForeverHandler( new(
-				GameEventAction.CAMERA_SET_POS, "_EventCamera_CAMERA_SET_POS",
+				Events.ActionCode.CAMERA_SET_POS, "_EventCamera_CAMERA_SET_POS",
 				( SessionIncomingMessage message ) =>
 				{
 					serverCameraFieldOfView = message.Event.Var1;
