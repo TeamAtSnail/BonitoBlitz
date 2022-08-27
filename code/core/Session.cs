@@ -15,7 +15,7 @@ public partial class Session
 	protected override void PostHandleSingleUseEvent( SessionIncomingMessage handler, uint statusCode )
 	{
 		if ( Host.IsClient && handler.Event.Action != GameEventAction.ACK )
-			SessionNetworking.SendToServer( GameEventCreator.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
+			CoreNetworking.SendToServer( GameEventCreator.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
 	}
 
 	public void ServerOnReceiveEvent( GameEvent evt, Client client )
@@ -30,6 +30,6 @@ public partial class Session
 
 	public void SendToServer( GameEvent @event )
 	{
-		SessionNetworking.SendToServer( @event );
+		CoreNetworking.SendToServer( @event );
 	}
 }

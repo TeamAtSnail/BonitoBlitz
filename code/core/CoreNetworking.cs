@@ -6,7 +6,7 @@ namespace gm0;
 using Sandbox;
 using System.Collections.Generic;
 
-public static partial class SessionNetworking
+public static partial class CoreNetworking
 {
 	private static readonly List<Session> networkedSessions = new();
 
