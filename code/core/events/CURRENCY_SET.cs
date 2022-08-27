@@ -8,7 +8,7 @@ public partial class GameEventCreator
 {
 	public partial class Currency
 	{
-		public static GameEvent SetCurrencyArbitrary( uint playerIndex, uint currency, uint value )
+		public static GameEvent SetCurrencyX( uint playerIndex, uint currency, uint value )
 			=> new( (uint)GameEventAction.CURRENCY_SET, playerIndex, currency, value );
 		public static GameEvent SetCurrency0( uint playerIndex, uint value )
 			=> new( (uint)GameEventAction.CURRENCY_SET, playerIndex, 0, value );

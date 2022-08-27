@@ -86,25 +86,6 @@ public struct GameEvent
 }
 
 /// <summary>
-/// Registry of all known events
-/// </summary>
-public enum GameEventAction : uint
-{
-	INVALID = 0,
-	ACK,
-	UPDATE,
-
-	/* Game actions */
-	/* Camera */
-	CAMERA_SET_ANG, // (pitch, yaw, roll)
-	CAMERA_SET_POS, // (x, y, z)
-	CAMERA_SET_FOV, // (fov,,)
-
-	/* Currencies */
-	CURRENCY_SET // (player, currency, value)
-}
-
-/// <summary>
 /// Class to quickly create events for specific actions
 /// </summary>
 public partial class GameEventCreator { }
