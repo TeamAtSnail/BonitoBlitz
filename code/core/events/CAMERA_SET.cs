@@ -6,24 +6,17 @@ namespace gm0;
 
 public partial class GameEventCreator
 {
-	public static GameEvent SetCameraAngle( Angles angles )
+	public partial class Camera
 	{
-		return new GameEvent( (uint)GameEventAction.CAMERA_SET_ANG, angles.pitch, angles.yaw, angles.roll );
-	}
-	public static GameEvent SetCameraAngle( float pitch, float yaw, float roll )
-	{
-		return new GameEvent( (uint)GameEventAction.CAMERA_SET_ANG, pitch, yaw, roll );
-	}
-	public static GameEvent SetCameraPos( Vector3 position )
-	{
-		return new GameEvent( (uint)GameEventAction.CAMERA_SET_POS, position.x, position.y, position.z );
-	}
-	public static GameEvent SetCameraPos( float x, float y, float z )
-	{
-		return new GameEvent( (uint)GameEventAction.CAMERA_SET_POS, x, y, z );
-	}
-	public static GameEvent SetCameraFOV( uint fov )
-	{
-		return new GameEvent( (uint)GameEventAction.CAMERA_SET_FOV, fov );
+		public static GameEvent SetCameraAngle( Angles angles )
+			=> new( (uint)GameEventAction.CAMERA_SET_ANG, angles.pitch, angles.yaw, angles.roll );
+		public static GameEvent SetCameraAngle( float pitch, float yaw, float roll )
+			=> new( (uint)GameEventAction.CAMERA_SET_ANG, pitch, yaw, roll );
+		public static GameEvent SetCameraPos( Vector3 position )
+			=> new( (uint)GameEventAction.CAMERA_SET_POS, position.x, position.y, position.z );
+		public static GameEvent SetCameraPos( float x, float y, float z )
+			=> new( (uint)GameEventAction.CAMERA_SET_POS, x, y, z );
+		public static GameEvent SetCameraFOV( uint fov )
+			=> new( (uint)GameEventAction.CAMERA_SET_FOV, fov );
 	}
 }
