@@ -22,11 +22,11 @@ public struct RegisteredGameEvent
 }
 
 /// <summary>
-/// Server-side player data with index / history number
+/// Server-side client with index / history number
 /// </summary>
-public struct RegisteredPlayer
+public struct RegisteredClient
 {
-	public RegisteredPlayer( Session session, uint index, Sandbox.Client? activeClient = null )
+	public RegisteredClient( Session session, uint index, Sandbox.Client? activeClient = null )
 	{
 		Index = index;
 		ActiveClient = activeClient;
@@ -95,9 +95,9 @@ public struct RegisteredPlayer
 public partial class Session
 {
 	private readonly List<RegisteredGameEvent> eventRegistry = new();
-	private readonly List<RegisteredPlayer> playerRegistry = new();
+	private readonly List<RegisteredClient> clientRegistry = new();
 	protected uint GetNextEventIndex() => (uint)eventRegistry.Count;
-	protected uint GetNextPlayerIndex() => (uint)playerRegistry.Count;
+	protected uint GetNextClientIndex() => (uint)clientRegistry.Count;
 
 	protected RegisteredGameEvent RegisterEvent( GameEvent @event )
 	{
@@ -110,15 +110,15 @@ public partial class Session
 		return registeredEvent;
 	}
 
-	protected RegisteredPlayer RegisterPlayer( Sandbox.Client client )
+	protected RegisteredClient RegisterPlayer( Sandbox.Client client )
 	{
-		var registeredClient = new RegisteredPlayer(
+		var registeredClient = new RegisteredClient(
 			this,
-			GetNextPlayerIndex(),
+			GetNextClientIndex(),
 			client
 		);
 
-		playerRegistry.Add( registeredClient );
+		clientRegistry.Add( registeredClient );
 		return registeredClient;
 	}
 
@@ -127,12 +127,12 @@ public partial class Session
 	/// </summary>
 	/// <param name="client">Client</param>
 	/// <returns>RegisteredPlayer</returns>
-	public RegisteredPlayer GetRegisteredPlayer( Sandbox.Client client )
+	public RegisteredClient GetRegisteredPlayer( Sandbox.Client client )
 	{
-		RegisteredPlayer? player = null;
-		for ( int i = playerRegistry.Count - 1; i >= 0; i-- )
+		RegisteredClient? player = null;
+		for ( int i = clientRegistry.Count - 1; i >= 0; i-- )
 		{
-			RegisteredPlayer v = playerRegistry[i];
+			RegisteredClient v = clientRegistry[i];
 			if ( v.ActiveClient == client )
 			{
 				player = v;
@@ -144,11 +144,11 @@ public partial class Session
 			return player.Value;
 
 		player = RegisterPlayer( client );
-		playerRegistry.Add( player.Value );
+		clientRegistry.Add( player.Value );
 		return player.Value;
 	}
 
-	public void SendToPlayer( RegisteredPlayer client, RegisteredGameEvent @event )
+	public void SendToPlayer( RegisteredClient client, RegisteredGameEvent @event )
 	{
 		if ( !Sandbox.Host.IsServer )
 			return;
@@ -156,10 +156,10 @@ public partial class Session
 		client.Queue.Add( @event );
 		client.SendNextInQueue();
 	}
-	public void SendToPlayer( RegisteredPlayer client, GameEvent @event ) => SendToPlayer( client, RegisterEvent( @event ) );
+	public void SendToPlayer( RegisteredClient client, GameEvent @event ) => SendToPlayer( client, RegisterEvent( @event ) );
 	public void SendToAllPlayers( RegisteredGameEvent @event )
 	{
-		foreach ( var player in playerRegistry )
+		foreach ( var player in clientRegistry )
 		{
 			SendToPlayer( player, @event );
 		}
