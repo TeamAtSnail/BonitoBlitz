@@ -26,9 +26,3 @@ public enum ActionCode : uint
 	/* Currencies */
 	CURRENCY_SET // (player idx, currency, value)
 }
-
-public enum StatusCode : uint
-{
-	OK = 0,
-	UNEXPECTED_PLAYER = 1
-}
