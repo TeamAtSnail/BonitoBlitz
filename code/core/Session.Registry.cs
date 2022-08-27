@@ -148,7 +148,7 @@ public partial class Session
 		return player.Value;
 	}
 
-	public void SendToPlayer( RegisteredClient client, RegisteredGameEvent @event )
+	public void SendEventToClient( RegisteredClient client, RegisteredGameEvent @event )
 	{
 		if ( !Sandbox.Host.IsServer )
 			return;
@@ -156,13 +156,13 @@ public partial class Session
 		client.Queue.Add( @event );
 		client.SendNextInQueue();
 	}
-	public void SendToPlayer( RegisteredClient client, GameEvent @event ) => SendToPlayer( client, RegisterEvent( @event ) );
-	public void SendToAllPlayers( RegisteredGameEvent @event )
+	public void SendEventToClient( RegisteredClient client, GameEvent @event ) => SendEventToClient( client, RegisterEvent( @event ) );
+	public void BroadcastEvent( RegisteredGameEvent @event )
 	{
 		foreach ( var player in clientRegistry )
 		{
-			SendToPlayer( player, @event );
+			SendEventToClient( player, @event );
 		}
 	}
-	public void SendToAllPlayers( GameEvent @event ) => SendToAllPlayers( RegisterEvent( @event ) );
+	public void BroadcastEvent( GameEvent @event ) => BroadcastEvent( RegisterEvent( @event ) );
 }

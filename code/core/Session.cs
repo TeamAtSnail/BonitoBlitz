@@ -28,7 +28,7 @@ public partial class Session
 		HandleEvent( new SessionIncomingMessage( evt.Event, registryIndex: evt.Index ) );
 	}
 
-	public void SendToServer( GameEvent @event )
+	public void SendEventToServer( GameEvent @event )
 	{
 		CoreNetworking.SendToServer( @event );
 	}
