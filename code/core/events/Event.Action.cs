@@ -2,14 +2,12 @@
  * part of the gm0 (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
-using System;
-
+namespace gm0.Events;
 
 /// <summary>
 /// Registry of all known events
 /// </summary>
-public enum GameEventAction : uint
+public enum ActionCode : uint
 {
 	INVALID = 0,
 	ACK,
@@ -29,7 +27,7 @@ public enum GameEventAction : uint
 	CURRENCY_SET // (player idx, currency, value)
 }
 
-public enum EventStatusCode : uint
+public enum StatusCode : uint
 {
 	OK = 0,
 	UNEXPECTED_PLAYER = 1

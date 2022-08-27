@@ -2,7 +2,7 @@
  * part of the gm0 (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace gm0.Events;
 using System;
 
 /// <summary>
@@ -11,17 +11,17 @@ using System;
 /// </summary>
 public struct GameEvent
 {
-	public GameEvent( uint action, uint var1 = 0, uint var2 = 0, uint var3 = 0 )
+	public GameEvent( ActionCode action, uint var1 = 0, uint var2 = 0, uint var3 = 0 )
 	{
-		this.action = action;
+		this.action = (uint)action;
 		Var1 = var1;
 		Var2 = var2;
 		Var3 = var3;
 	}
 
-	public GameEvent( uint action, int var1 = 0, int var2 = 0, int var3 = 0 )
+	public GameEvent( ActionCode action, int var1 = 0, int var2 = 0, int var3 = 0 )
 	{
-		this.action = action;
+		this.action = (uint)action;
 		Var1 = 0;
 		Var2 = 0;
 		Var3 = 0;
@@ -30,9 +30,9 @@ public struct GameEvent
 		Var3i = var3;
 	}
 
-	public GameEvent( uint action, float var1 = 0, float var2 = 0, float var3 = 0 )
+	public GameEvent( ActionCode action, float var1 = 0, float var2 = 0, float var3 = 0 )
 	{
-		this.action = action;
+		this.action = (uint)action;
 		Var1 = 0;
 		Var2 = 0;
 		Var3 = 0;
@@ -42,7 +42,7 @@ public struct GameEvent
 	}
 
 	private readonly uint action;
-	public GameEventAction Action => (GameEventAction)action;
+	public ActionCode Action => (ActionCode)action;
 
 	public uint Var1;
 	public uint Var2;
