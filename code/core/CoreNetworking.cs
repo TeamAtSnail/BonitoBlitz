@@ -35,7 +35,7 @@ public static partial class CoreNetworking
 	[ClientRpc]
 	// can't use @event as parameter name in ClientRpc functions
 	// https://github.com/Facepunch/sbox-issues/issues/2227
-	public static void ClientOnReceiveEvent( RegisteredGameEvent _event )
+	public static void ClientOnReceiveEvent( IndexedGameEvent _event )
 	{
 		foreach ( var session in networkedSessions )
 		{
@@ -48,7 +48,7 @@ public static partial class CoreNetworking
 		ServerOnReceiveEvent( (uint)@event.Action, @event.Var1, @event.Var2, @event.Var3 );
 	}
 
-	public static void SendToClient( Client client, RegisteredGameEvent @event )
+	public static void SendToClient( Client client, IndexedGameEvent @event )
 	{
 		ClientOnReceiveEvent( To.Single( client ), @event );
 	}

@@ -10,9 +10,9 @@ using System.Collections.Generic;
 /// <summary>
 /// Server-side GameEvent with index / history number
 /// </summary>
-public struct RegisteredGameEvent
+public struct IndexedGameEvent
 {
-	public RegisteredGameEvent( uint index, Events.GameEvent @event )
+	public IndexedGameEvent( uint index, Events.GameEvent @event )
 	{
 		Index = index;
 		Event = @event;
@@ -24,9 +24,9 @@ public struct RegisteredGameEvent
 /// <summary>
 /// Server-side client with index / history number
 /// </summary>
-public struct RegisteredClient
+public struct IndexedClient
 {
-	public RegisteredClient( Session session, uint index, Sandbox.Client? activeClient = null )
+	public IndexedClient( Session session, uint index, Sandbox.Client? activeClient = null )
 	{
 		Index = index;
 		ActiveClient = activeClient;
@@ -39,7 +39,7 @@ public struct RegisteredClient
 	}
 	public readonly uint Index;
 	public readonly Sandbox.Client? ActiveClient;
-	public readonly List<RegisteredGameEvent> Queue = new();
+	public readonly List<IndexedGameEvent> Queue = new();
 	private uint? lastAcknowledgedEvent = null;
 	public uint? LastAcknowledgedEvent => lastAcknowledgedEvent;
 
@@ -94,14 +94,14 @@ public struct RegisteredClient
 
 public partial class Session
 {
-	private readonly List<RegisteredGameEvent> eventRegistry = new();
-	private readonly List<RegisteredClient> clientRegistry = new();
+	private readonly List<IndexedGameEvent> eventRegistry = new();
+	private readonly List<IndexedClient> clientRegistry = new();
 	protected uint GetNextEventIndex() => (uint)eventRegistry.Count;
 	protected uint GetNextClientIndex() => (uint)clientRegistry.Count;
 
-	protected RegisteredGameEvent RegisterEvent( Events.GameEvent @event )
+	protected IndexedGameEvent RegisterEvent( Events.GameEvent @event )
 	{
-		var registeredEvent = new RegisteredGameEvent(
+		var registeredEvent = new IndexedGameEvent(
 			GetNextEventIndex(),
 			@event
 		);
@@ -110,9 +110,9 @@ public partial class Session
 		return registeredEvent;
 	}
 
-	protected RegisteredClient RegisterPlayer( Sandbox.Client client )
+	protected IndexedClient RegisterPlayer( Sandbox.Client client )
 	{
-		var registeredClient = new RegisteredClient(
+		var registeredClient = new IndexedClient(
 			this,
 			GetNextClientIndex(),
 			client
@@ -127,12 +127,12 @@ public partial class Session
 	/// </summary>
 	/// <param name="client">Client</param>
 	/// <returns>RegisteredPlayer</returns>
-	public RegisteredClient GetRegisteredPlayer( Sandbox.Client client )
+	public IndexedClient GetRegisteredPlayer( Sandbox.Client client )
 	{
-		RegisteredClient? player = null;
+		IndexedClient? player = null;
 		for ( int i = clientRegistry.Count - 1; i >= 0; i-- )
 		{
-			RegisteredClient v = clientRegistry[i];
+			IndexedClient v = clientRegistry[i];
 			if ( v.ActiveClient == client )
 			{
 				player = v;
@@ -148,7 +148,7 @@ public partial class Session
 		return player.Value;
 	}
 
-	public void SendEventToClient( RegisteredClient client, RegisteredGameEvent @event )
+	public void SendEventToClient( IndexedClient client, IndexedGameEvent @event )
 	{
 		if ( !Sandbox.Host.IsServer )
 			return;
@@ -156,8 +156,8 @@ public partial class Session
 		client.Queue.Add( @event );
 		client.SendNextInQueue();
 	}
-	public void SendEventToClient( RegisteredClient client, Events.GameEvent @event ) => SendEventToClient( client, RegisterEvent( @event ) );
-	public void BroadcastEvent( RegisteredGameEvent @event )
+	public void SendEventToClient( IndexedClient client, Events.GameEvent @event ) => SendEventToClient( client, RegisterEvent( @event ) );
+	public void BroadcastEvent( IndexedGameEvent @event )
 	{
 		foreach ( var player in clientRegistry )
 		{

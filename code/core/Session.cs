@@ -23,7 +23,7 @@ public partial class Session
 		HandleEvent( new SessionIncomingMessage( evt, client ) );
 	}
 
-	public void ClientOnReceiveEvent( RegisteredGameEvent evt )
+	public void ClientOnReceiveEvent( IndexedGameEvent evt )
 	{
 		HandleEvent( new SessionIncomingMessage( evt.Event, registryIndex: evt.Index ) );
 	}
