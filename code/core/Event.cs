@@ -96,9 +96,12 @@ public enum GameEventAction : uint
 
 	/* Game actions */
 	/* Camera */
-	CAMERA_SET_ANG,
-	CAMERA_SET_POS,
-	CAMERA_SET_FOV
+	CAMERA_SET_ANG, // (pitch, yaw, roll)
+	CAMERA_SET_POS, // (x, y, z)
+	CAMERA_SET_FOV, // (fov,,)
+
+	/* Currencies */
+	CURRENCY_SET // (player, currency, value)
 }
 
 /// <summary>
