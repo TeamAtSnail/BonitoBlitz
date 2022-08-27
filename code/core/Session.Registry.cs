@@ -12,13 +12,13 @@ using System.Collections.Generic;
 /// </summary>
 public struct RegisteredGameEvent
 {
-	public RegisteredGameEvent( uint index, GameEvent @event )
+	public RegisteredGameEvent( uint index, Events.GameEvent @event )
 	{
 		Index = index;
 		Event = @event;
 	}
 	public readonly uint Index;
-	public readonly GameEvent Event;
+	public readonly Events.GameEvent Event;
 }
 
 /// <summary>
@@ -33,7 +33,7 @@ public struct RegisteredClient
 
 		// Set up acknowledgement handler for this player
 		session.AddForeverHandler( new SessionEventHandler<SessionIncomingMessage>(
-			GameEventAction.INVALID, "_Session.Registry_ACKFromClient_" + Index,
+			Events.ActionCode.INVALID, "_Session.Registry_ACKFromClient_" + Index,
 			HandleEventAcknowledged
 		) );
 	}
@@ -99,7 +99,7 @@ public partial class Session
 	protected uint GetNextEventIndex() => (uint)eventRegistry.Count;
 	protected uint GetNextClientIndex() => (uint)clientRegistry.Count;
 
-	protected RegisteredGameEvent RegisterEvent( GameEvent @event )
+	protected RegisteredGameEvent RegisterEvent( Events.GameEvent @event )
 	{
 		var registeredEvent = new RegisteredGameEvent(
 			GetNextEventIndex(),
@@ -156,7 +156,7 @@ public partial class Session
 		client.Queue.Add( @event );
 		client.SendNextInQueue();
 	}
-	public void SendEventToClient( RegisteredClient client, GameEvent @event ) => SendEventToClient( client, RegisterEvent( @event ) );
+	public void SendEventToClient( RegisteredClient client, Events.GameEvent @event ) => SendEventToClient( client, RegisterEvent( @event ) );
 	public void BroadcastEvent( RegisteredGameEvent @event )
 	{
 		foreach ( var player in clientRegistry )
@@ -164,5 +164,5 @@ public partial class Session
 			SendEventToClient( player, @event );
 		}
 	}
-	public void BroadcastEvent( GameEvent @event ) => BroadcastEvent( RegisterEvent( @event ) );
+	public void BroadcastEvent( Events.GameEvent @event ) => BroadcastEvent( RegisterEvent( @event ) );
 }

@@ -28,7 +28,7 @@ public static partial class CoreNetworking
 		{
 			// having to make a new GameEvent sucks but
 			// todo / wait: implement ServerRpc when able to 
-			session.ServerOnReceiveEvent( new GameEvent( action, var1, var2, var3 ), ConsoleSystem.Caller );
+			session.ServerOnReceiveEvent( new Events.GameEvent( (Events.ActionCode)action, var1, var2, var3 ), ConsoleSystem.Caller );
 		}
 	}
 
@@ -43,7 +43,7 @@ public static partial class CoreNetworking
 		}
 	}
 
-	public static void SendToServer( GameEvent @event )
+	public static void SendToServer( Events.GameEvent @event )
 	{
 		ServerOnReceiveEvent( (uint)@event.Action, @event.Var1, @event.Var2, @event.Var3 );
 	}

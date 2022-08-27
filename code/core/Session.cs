@@ -9,16 +9,16 @@ public partial class Session
 {
 	protected override void PostHandleForeverEvent( SessionIncomingMessage handler, uint statusCode )
 	{
-		if ( Host.IsClient && handler.Event.Action != GameEventAction.ACK )
-			CoreNetworking.SendToServer( GameEventCreator.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
+		if ( Host.IsClient && handler.Event.Action != Events.ActionCode.ACK )
+			CoreNetworking.SendToServer( Events.Builder.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
 	}
 	protected override void PostHandleSingleUseEvent( SessionIncomingMessage handler, uint statusCode )
 	{
-		if ( Host.IsClient && handler.Event.Action != GameEventAction.ACK )
-			CoreNetworking.SendToServer( GameEventCreator.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
+		if ( Host.IsClient && handler.Event.Action != Events.ActionCode.ACK )
+			CoreNetworking.SendToServer( Events.Builder.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
 	}
 
-	public void ServerOnReceiveEvent( GameEvent evt, Client client )
+	public void ServerOnReceiveEvent( Events.GameEvent evt, Client client )
 	{
 		HandleEvent( new SessionIncomingMessage( evt, client ) );
 	}
@@ -28,7 +28,7 @@ public partial class Session
 		HandleEvent( new SessionIncomingMessage( evt.Event, registryIndex: evt.Index ) );
 	}
 
-	public void SendEventToServer( GameEvent @event )
+	public void SendEventToServer( Events.GameEvent @event )
 	{
 		CoreNetworking.SendToServer( @event );
 	}

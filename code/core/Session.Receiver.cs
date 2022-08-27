@@ -13,11 +13,11 @@ using Sandbox;
 /// <typeparam name="T">Function type</typeparam>
 public struct SessionEventHandler<T>
 {
-	public readonly GameEventAction Action;
+	public readonly Events.ActionCode Action;
 	public readonly string Id;
 	public readonly System.Func<T, uint> Func;
 
-	public SessionEventHandler( GameEventAction action, string id, System.Func<T, uint> func )
+	public SessionEventHandler( Events.ActionCode action, string id, System.Func<T, uint> func )
 	{
 		Action = action;
 		Id = id;
@@ -27,11 +27,11 @@ public struct SessionEventHandler<T>
 
 public struct SessionIncomingMessage
 {
-	public readonly GameEvent Event;
+	public readonly Events.GameEvent Event;
 	public readonly Client? Client;
 	public readonly uint? RegistryIndex;
 
-	public SessionIncomingMessage( GameEvent @event, Client? client = null, uint? registryIndex = null )
+	public SessionIncomingMessage( Events.GameEvent @event, Client? client = null, uint? registryIndex = null )
 	{
 		Event = @event;
 		Client = client;
@@ -93,7 +93,7 @@ public partial class Session : EventReceiver
 	{
 		foreach ( var handler in foreverHandlers )
 		{
-			if ( handler.Action == message.Event.Action || handler.Action == GameEventAction.INVALID )
+			if ( handler.Action == message.Event.Action || handler.Action == Events.ActionCode.INVALID )
 			{
 				PostHandleForeverEvent( message, handler.Func( message ) );
 			}
@@ -102,7 +102,7 @@ public partial class Session : EventReceiver
 		for ( int i = singleUseHandlers.Count - 1; i >= 0; i-- )
 		{
 			var handler = singleUseHandlers[i];
-			if ( handler.Action == message.Event.Action || handler.Action == GameEventAction.INVALID )
+			if ( handler.Action == message.Event.Action || handler.Action == Events.ActionCode.INVALID )
 			{
 				PostHandleSingleUseEvent( message, handler.Func( message ) );
 				singleUseHandlers.RemoveAt( i );
