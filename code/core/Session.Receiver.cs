@@ -30,12 +30,14 @@ public struct SessionIncomingMessage
 	public readonly Events.GameEvent Event;
 	public readonly Client? Client;
 	public readonly uint? RegistryIndex;
+	public readonly bool Shared;
 
-	public SessionIncomingMessage( Events.GameEvent @event, Client? client = null, uint? registryIndex = null )
+	public SessionIncomingMessage( Events.GameEvent @event, Client? client = null, uint? registryIndex = null, bool shared = false )
 	{
 		Event = @event;
 		Client = client;
 		RegistryIndex = registryIndex;
+		Shared = shared;
 	}
 }
 

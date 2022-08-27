@@ -147,22 +147,4 @@ public partial class Session
 		clientRegistry.Add( player.Value );
 		return player.Value;
 	}
-
-	public void SendEventToClient( IndexedClient client, IndexedGameEvent @event )
-	{
-		if ( !Sandbox.Host.IsServer )
-			return;
-
-		client.Queue.Add( @event );
-		client.SendNextInQueue();
-	}
-	public void SendEventToClient( IndexedClient client, Events.GameEvent @event ) => SendEventToClient( client, RegisterEvent( @event ) );
-	public void BroadcastEvent( IndexedGameEvent @event )
-	{
-		foreach ( var player in clientRegistry )
-		{
-			SendEventToClient( player, @event );
-		}
-	}
-	public void BroadcastEvent( Events.GameEvent @event ) => BroadcastEvent( RegisterEvent( @event ) );
 }
