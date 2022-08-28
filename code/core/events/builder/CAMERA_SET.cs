@@ -16,7 +16,7 @@ public partial class Builder
 			=> new( ActionCode.CAMERA_SET_POS, position.x, position.y, position.z );
 		public static GameEvent SetCameraPos( float x, float y, float z )
 			=> new( ActionCode.CAMERA_SET_POS, x, y, z );
-		public static GameEvent SetCameraFOV( uint fov )
+		public static GameEvent SetCameraFOV( int fov )
 			=> new( ActionCode.CAMERA_SET_FOV, fov );
 	}
 }
