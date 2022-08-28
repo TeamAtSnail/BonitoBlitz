@@ -24,9 +24,9 @@ public struct IndexedGameEvent
 /// <summary>
 /// Server-side client with index / history number
 /// </summary>
-public struct IndexedClient
+public class SessionClient
 {
-	public IndexedClient( Session session, uint index, Sandbox.Client? activeClient = null )
+	public SessionClient( Session session, uint index, Sandbox.Client? activeClient = null )
 	{
 		Index = index;
 		ActiveClient = activeClient;
@@ -68,6 +68,7 @@ public struct IndexedClient
 				return 0;
 			}
 		}
+
 		Log.Error( $"Event {eventIndex} acknowledged by client not found in queue!" );
 		return 1;
 	}
@@ -95,7 +96,7 @@ public struct IndexedClient
 public partial class Session
 {
 	private readonly List<IndexedGameEvent> eventRegistry = new();
-	private readonly List<IndexedClient> clientRegistry = new();
+	private readonly List<SessionClient> clientRegistry = new();
 	protected uint GetNextEventIndex() => (uint)eventRegistry.Count;
 	protected uint GetNextClientIndex() => (uint)clientRegistry.Count;
 
@@ -110,9 +111,9 @@ public partial class Session
 		return registeredEvent;
 	}
 
-	protected IndexedClient RegisterPlayer( Sandbox.Client client )
+	protected SessionClient RegisterPlayer( Sandbox.Client client )
 	{
-		var registeredClient = new IndexedClient(
+		var registeredClient = new SessionClient(
 			this,
 			GetNextClientIndex(),
 			client
@@ -123,16 +124,16 @@ public partial class Session
 	}
 
 	/// <summary>
-	/// Get registered player from client (or register it if it doesn't exist)
+	/// Get session client from sbox client (or register it if it doesn't exist)
 	/// </summary>
 	/// <param name="client">Client</param>
 	/// <returns>RegisteredPlayer</returns>
-	public IndexedClient GetIndexedClient( Sandbox.Client client )
+	public SessionClient GetSessionClient( Sandbox.Client client )
 	{
-		IndexedClient? player = null;
+		SessionClient? player = null;
 		for ( int i = clientRegistry.Count - 1; i >= 0; i-- )
 		{
-			IndexedClient v = clientRegistry[i];
+			SessionClient v = clientRegistry[i];
 			if ( v.ActiveClient == client )
 			{
 				player = v;
@@ -141,9 +142,9 @@ public partial class Session
 		}
 
 		if ( player != null )
-			return player.Value;
+			return player;
 
 		player = RegisterPlayer( client );
-		return player.Value;
+		return player;
 	}
 }
