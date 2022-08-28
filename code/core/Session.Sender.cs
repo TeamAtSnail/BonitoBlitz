@@ -7,7 +7,7 @@ namespace gm0;
 
 public partial class Session
 {
-	public void SendEventToClient( IndexedClient client, IndexedGameEvent @event, bool shared = true )
+	public void SendEventToClient( SessionClient client, IndexedGameEvent @event, bool shared = true )
 	{
 		// Handle event on server first
 		if ( shared )
@@ -23,7 +23,7 @@ public partial class Session
 		client.Queue.Add( @event );
 		client.SendNextInQueue();
 	}
-	public void SendEventToClient( IndexedClient client, Events.GameEvent @event, bool shared = true ) => SendEventToClient( client, RegisterEvent( @event ), shared );
+	public void SendEventToClient( SessionClient client, Events.GameEvent @event, bool shared = true ) => SendEventToClient( client, RegisterEvent( @event ), shared );
 	public void BroadcastEvent( IndexedGameEvent @event, bool shared = true )
 	{
 		// Handle event on server first
@@ -39,6 +39,11 @@ public partial class Session
 		// Handle event on clients
 		foreach ( var client in clientRegistry )
 		{
+			Log.Info( $"Adding {@event.Index} (action {@event.Event.Action}) to queue" );
+			client.Queue.ForEach( ( e ) =>
+			{
+				Log.Info( $"queue member: {e.Index}, action: {e.Event.Action}" );
+			} );
 			client.Queue.Add( @event );
 		    client.SendNextInQueue();
 		}
