@@ -144,7 +144,6 @@ public partial class Session
 			return player.Value;
 
 		player = RegisterPlayer( client );
-		clientRegistry.Add( player.Value );
 		return player.Value;
 	}
 }
