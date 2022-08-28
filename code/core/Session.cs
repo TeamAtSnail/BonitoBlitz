@@ -18,6 +18,12 @@ public partial class Session
 			CoreNetworking.SendToServer( Events.Builder.Acknowledge( handler.RegistryIndex.Value, statusCode ) );
 	}
 
+	protected override void PostUnhandledEvent( SessionIncomingMessage handler )
+	{
+		if ( Host.IsClient && handler.Event.Action != Events.ActionCode.ACK )
+			CoreNetworking.SendToServer( Events.Builder.Acknowledge( handler.RegistryIndex.Value, (uint) Events.StatusCode.NO_HANDLER ) );
+	}
+
 	public void ServerOnReceiveEvent( Events.GameEvent evt, Client client )
 	{
 		HandleEvent( new SessionIncomingMessage( evt, client ) );

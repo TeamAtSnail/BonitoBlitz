@@ -45,6 +45,7 @@ public abstract class EventReceiver
 {
 	protected abstract void PostHandleForeverEvent( SessionIncomingMessage handler, uint statusCode );
 	protected abstract void PostHandleSingleUseEvent( SessionIncomingMessage handler, uint statusCode );
+	protected abstract void PostUnhandledEvent( SessionIncomingMessage handler );
 }
 
 public partial class Session : EventReceiver
@@ -93,12 +94,14 @@ public partial class Session : EventReceiver
 	/// <param name="message">Incoming message</param>
 	protected void HandleEvent( SessionIncomingMessage message )
 	{
+		bool handled = false;
 		for ( int i = foreverHandlers.Count - 1; i >= 0; i-- )
 		{
 			var handler = foreverHandlers[i];
 			if ( handler.Action == message.Event.Action || handler.Action == Events.ActionCode.INVALID )
 			{
 				PostHandleForeverEvent( message, handler.Func( message ) );
+				handled = true;
 			}
 		}
 
@@ -109,7 +112,13 @@ public partial class Session : EventReceiver
 			{
 				PostHandleSingleUseEvent( message, handler.Func( message ) );
 				singleUseHandlers.RemoveAt( i );
+				handled = true;
 			}
+		}
+
+		if (!handled) {
+			// Event not handled
+			PostUnhandledEvent( message );
 		}
 	}
 }

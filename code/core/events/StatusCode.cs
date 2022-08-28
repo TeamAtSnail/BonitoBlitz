@@ -7,5 +7,6 @@ namespace gm0.Events;
 public enum StatusCode : uint
 {
 	OK = 0,
-	UNEXPECTED_PLAYER = 1
+	UNEXPECTED_PLAYER = 1,
+	NO_HANDLER = 2,
 }
