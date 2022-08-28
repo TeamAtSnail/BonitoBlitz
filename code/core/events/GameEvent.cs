@@ -89,4 +89,28 @@ public struct GameEvent
 		get => data.Float4;
 		set => data.Float4 = value;
 	}
+
+	public ulong UlongVar1
+	{
+		get => data.Ulong1;
+		set => data.Ulong1 = value;
+	}
+
+	public ulong UlongVar2
+	{
+		get => data.Ulong2;
+		set => data.Ulong2 = value;
+	}
+
+	public long LongVar1
+	{
+		get => data.Long1;
+		set => data.Long1 = value;
+	}
+
+	public long LongVar2
+	{
+		get => data.Long2;
+		set => data.Long2 = value;
+	}
 }

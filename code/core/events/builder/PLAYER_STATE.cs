@@ -8,7 +8,7 @@ public partial class Builder
 {
 	public partial class PlayerData
 	{
-		public static GameEvent Init( uint playerIndex )
-			=> new( ActionCode.PLAYER_DATA_INIT, playerIndex, 0, 0 );
+		public static GameEvent Init( uint playerIndex, long playerId )
+			=> new( ActionCode.PLAYER_DATA_INIT, playerIndex, playerId );
 	}
 }

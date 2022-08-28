@@ -93,8 +93,9 @@ public partial class Session : EventReceiver
 	/// <param name="message">Incoming message</param>
 	protected void HandleEvent( SessionIncomingMessage message )
 	{
-		foreach ( var handler in foreverHandlers )
+		for ( int i = foreverHandlers.Count - 1; i >= 0; i-- )
 		{
+			var handler = foreverHandlers[i];
 			if ( handler.Action == message.Event.Action || handler.Action == Events.ActionCode.INVALID )
 			{
 				PostHandleForeverEvent( message, handler.Func( message ) );
