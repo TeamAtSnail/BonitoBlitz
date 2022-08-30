@@ -9,7 +9,11 @@ public partial class Session
 {
 	public void SendEventToClient( SessionClient client, IndexedGameEvent @event, bool shared = true )
 	{
-		// Handle event on server first
+		// Handle event on client
+		client.Queue.Add( @event );
+		client.SendNextInQueue();
+
+		// Handle event on server
 		if ( shared )
 		{
 			HandleEvent( new SessionIncomingMessage(
@@ -18,37 +22,36 @@ public partial class Session
 				shared: true
 			) );
 		}
-
-		// Handle event on client
-		client.Queue.Add( @event );
-		client.SendNextInQueue();
 	}
 	public void SendEventToClient( SessionClient client, Events.GameEvent @event, bool shared = true ) => SendEventToClient( client, RegisterEvent( @event ), shared );
 	public void BroadcastEvent( IndexedGameEvent @event, bool shared = true )
 	{
-		// Handle event on server first
-		if ( shared )
-		{
-			HandleEvent( new SessionIncomingMessage(
-				@event.Event,
-				registryIndex: @event.Index,
-				shared: true
-			) );
-		}
-
 		// Handle event on clients
 		foreach ( var client in clientRegistry )
 		{
 			Log.Info( $"Adding {@event.Index} (action {@event.Event.Action}) to queue" );
 			client.Queue.Add( @event );
-		    client.SendNextInQueue();
+			client.SendNextInQueue();
+		}
+
+		// Handle event on server
+		if ( shared )
+		{
+			HandleEvent( new SessionIncomingMessage(
+				@event.Event,
+				registryIndex: @event.Index,
+				shared: true
+			) );
 		}
 	}
 	public void BroadcastEvent( Events.GameEvent @event, bool shared = true ) => BroadcastEvent( RegisterEvent( @event ), shared );
 
 	public void SendEventToServer( Events.GameEvent @event, bool shared = true )
 	{
-		// Handle event on client first
+		// Handle event on server
+		CoreNetworking.SendToServer( @event );
+
+		// Handle event on client
 		if ( shared )
 		{
 			HandleEvent( new SessionIncomingMessage(
@@ -57,8 +60,5 @@ public partial class Session
 				shared: true
 			) );
 		}
-
-		// Handle event on server
-		CoreNetworking.SendToServer( @event );
 	}
 }
