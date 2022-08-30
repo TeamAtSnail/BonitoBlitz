@@ -40,10 +40,6 @@ public partial class Session
 		foreach ( var client in clientRegistry )
 		{
 			Log.Info( $"Adding {@event.Index} (action {@event.Event.Action}) to queue" );
-			client.Queue.ForEach( ( e ) =>
-			{
-				Log.Info( $"queue member: {e.Index}, action: {e.Event.Action}" );
-			} );
 			client.Queue.Add( @event );
 		    client.SendNextInQueue();
 		}
