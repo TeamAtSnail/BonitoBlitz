@@ -16,8 +16,20 @@ using SandboxEditor;
 public class MapTile : Entity
 {
 	/// <summary>
-	/// Names of possible tiles to move to
+	/// Tile ID
 	/// </summary>
-	[Property( Title = "Next Map Tile(s)" )]
-	public TagList NextTileOptions { get; set; }
+	[Property( Title = "ID" )]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Next tile option
+	/// </summary>
+	[Property( Title = "Next Tile Option 1" )]
+	public int Option1 { get; set; }
+
+	/// <summary>
+	/// Next tile option
+	/// </summary>
+	[Property( Title = "Next Tile Option 2" )]
+	public int Option2 { get; set; }
 }
