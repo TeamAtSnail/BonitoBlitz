@@ -24,5 +24,11 @@ public enum ActionCode : uint
 	CAMERA_SET_FOV, // (fov,,)
 
 	/* Currencies */
-	CURRENCY_SET // (player idx, currency, value)
+	CURRENCY_SET, // (player idx, currency, value)
+
+	/* Board */
+	BOARD_PLAYER_ATTEMPT_MOVE_TILE, // (player idx, tile id)
+	BOARD_PLAYER_CONFIRM_MOVE_TILE, // (player idx, tile id)
+	BOARD_PLAYER_REQUEST_CLIENT_OPTION, // (player idx)
+	BOARD_PLAYER_REPLY_CLIENT_OPTION // (tile id)
 }
