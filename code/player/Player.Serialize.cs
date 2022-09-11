@@ -5,16 +5,9 @@
  */
 namespace gm0;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using Sandbox;
 
 public partial class Player
 {
-	private long provisionalPlayerId = 0;
-
-	[JsonInclude]
-	public long PlayerId { get => Client.PlayerId; set => provisionalPlayerId = value; }
-
 	/// <summary>
 	/// Save data for player stored as JSON
 	/// </summary>

@@ -8,7 +8,7 @@ using System;
 using System.Text.Json.Serialization;
 using Sandbox;
 
-public partial class Player : AnimatedEntity
+public abstract partial class Player : AnimatedEntity
 {
 	[Net]
 	[JsonInclude]
@@ -21,34 +21,18 @@ public partial class Player : AnimatedEntity
 	public int Stars { get; set; }
 	[Net]
 	[JsonInclude]
-	public new Client Client { get; set; }
+	public long PlayerId { get; set; }
 
 	/// <summary>
 	/// Initial constructor for Player
 	/// </summary>
-	/// <param name="client">Initial active client</param>
-	public Player( Client client )
-	{
-		Uid = Guid.NewGuid();
-		SetNewClient( client );
-	}
+	public Player() => Uid = Guid.NewGuid();
 
 	/// <summary>
 	/// Set active client for player
 	/// </summary>
 	/// <param name="client">New active client</param>
-	public void SetNewClient( Client client )
-	{
-		Host.AssertServer( "SetNewClient" );
+	public void SetClient( Client client ) => PlayerId = client.PlayerId;
 
-		Client = client;
-
-		// Load entity model
-		Model = Model.Load( "models/citizen/citizen.vmdl" );
-
-		// Dress entity
-		ClothingContainer clothing = new();
-		clothing.LoadFromClient( client );
-		clothing.DressEntity( this );
-	}
+	public abstract void Initialize();
 }
