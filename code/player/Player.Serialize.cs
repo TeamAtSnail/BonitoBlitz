@@ -6,17 +6,17 @@
 namespace gm0;
 using System.Text.Json;
 
-public partial class Player
+public partial class BasePlayer
 {
 	/// <summary>
 	/// Save data for player stored as JSON
 	/// </summary>
-	public string SaveData => JsonSerializer.Serialize( this, new JsonSerializerOptions { IncludeFields = true } );
+	public string SaveData => JsonSerializer.Serialize( new { Uid, Coins, Stars, PlayerId, BoardTile } );
 
 	/// <summary>
 	/// Create new Player from save data JSON
 	/// </summary>
 	/// <param name="data">Save data</param>
 	/// <returns>Player</returns>
-	public static Player FromSaveData( string data ) => JsonSerializer.Deserialize<Player>( data, new JsonSerializerOptions { IncludeFields = true } );
+	public static T FromSaveData<T>( string data ) => JsonSerializer.Deserialize<T>( data );
 }

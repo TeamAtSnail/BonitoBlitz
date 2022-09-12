@@ -5,34 +5,49 @@
  */
 namespace gm0;
 using System;
-using System.Text.Json.Serialization;
 using Sandbox;
 
-public abstract partial class Player : AnimatedEntity
+public abstract partial class BasePlayer : AnimatedEntity
 {
 	[Net]
-	[JsonInclude]
 	public Guid Uid { get; set; }
 	[Net]
-	[JsonInclude]
 	public int Coins { get; set; }
 	[Net]
-	[JsonInclude]
 	public int Stars { get; set; }
 	[Net]
-	[JsonInclude]
 	public long PlayerId { get; set; }
+	[Net]
+	public int BoardTile { get; set; }
 
 	/// <summary>
 	/// Initial constructor for Player
 	/// </summary>
-	public Player() => Uid = Guid.NewGuid();
+	public BasePlayer()
+	{
+		Uid = Guid.NewGuid();
+		Camera = new ArbCamera();
+	}
 
 	/// <summary>
 	/// Set active client for player
 	/// </summary>
 	/// <param name="client">New active client</param>
-	public void SetClient( Client client ) => PlayerId = client.PlayerId;
+	public void SetClient( Client client )
+	{
+		if ( Client != null )
+		{
+			Log.Warning( $"Setting Client == {client} for Player with Client == {Client}. Previous one will be detached." );
+			Client.Pawn = null;
+		}
 
+		PlayerId = client.PlayerId;
+		client.Pawn = this;
+	}
+
+	/// <summary>
+	/// Player extension initializer
+	/// This should only be called when the Player has a Client
+	/// </summary>
 	public abstract void Initialize();
 }
