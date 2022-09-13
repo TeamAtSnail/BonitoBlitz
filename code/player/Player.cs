@@ -27,6 +27,7 @@ public abstract partial class BasePlayer : AnimatedEntity
 	{
 		Uid = Guid.NewGuid();
 		Camera = new ArbCamera();
+		Transmit = TransmitType.Always;
 	}
 
 	/// <summary>
