@@ -29,6 +29,9 @@ public partial class OptionTile : BaseTile
 	{
 		DebugOverlay.ScreenText( $"next: {SelectedNextTile}", Vector2.One * 100, 0, Color.Red );
 
+		if ( player.Client.IsBot )
+			return (Rand.Int( 0, 1 ) == 0) ? NextTile : SecondaryNextTile;
+
 		if ( Input.Pressed( InputButton.Left ) )
 			SelectedNextTile = NextTile;
 
