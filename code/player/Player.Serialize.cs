@@ -8,10 +8,12 @@ using System.Text.Json;
 
 public partial class BasePlayer
 {
+	public int BoardTileId { get => BoardTile.Id; }
+
 	/// <summary>
 	/// Save data for player stored as JSON
 	/// </summary>
-	public string SaveData => JsonSerializer.Serialize( new { Uid, Coins, Stars, PlayerId, BoardTile } );
+	public string SaveData => JsonSerializer.Serialize( new { Uid, Coins, Stars, PlayerId, BoardTileId } );
 
 	/// <summary>
 	/// Create new Player from save data JSON

@@ -18,7 +18,7 @@ public abstract partial class BasePlayer : AnimatedEntity
 	[Net]
 	public long PlayerId { get; set; }
 	[Net]
-	public int BoardTile { get; set; }
+	public BaseTile BoardTile { get; set; }
 
 	/// <summary>
 	/// Initial constructor for Player
@@ -43,6 +43,7 @@ public abstract partial class BasePlayer : AnimatedEntity
 
 		PlayerId = client.PlayerId;
 		client.Pawn = this;
+		Initialize();
 	}
 
 	/// <summary>
