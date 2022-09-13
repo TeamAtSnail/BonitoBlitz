@@ -8,29 +8,50 @@ using Sandbox;
 
 /// <summary>
 /// Singular map tile entity; used to denote tile position
-/// Requires name and next tile, all position and transforms etc. done in-engine
+/// Requires number, all position and transforms etc. done in-engine
 /// </summary>
-public abstract class BaseTile : Entity
+public abstract partial class BaseTile : Entity
 {
-	/// <summary>
-	/// Tile ID
-	/// </summary>
-	[Property( Title = "ID" )]
-	public int Id { get; set; }
+	[Property( Title = "Tile Number" )]
+	[Net]
+	public int TileNumber { get; set; }
+
+	[Property( Title = "Next Tile" )]
+	[Net]
+	public int NextTile { get; set; }
 
 	/// <summary>
-	/// Next tile option
+	/// Called once when a player passes this tile at any point
 	/// </summary>
-	[Property( Title = "Next Tile Option 1" )]
-	public int Option1 { get; set; }
+	/// <param name="player">BoardPlayer</param>
+	public abstract void OnPlayerPass( BoardPlayer player );
 
 	/// <summary>
-	/// Next tile option
+	/// Called once when a player finishes their turn on this tile
 	/// </summary>
-	[Property( Title = "Next Tile Option 2" )]
-	public int Option2 { get; set; }
+	/// <param name="player">BoardPlayer</param>
+	public abstract void OnPlayerStand( BoardPlayer player );
 
-	public abstract void OnPlayerDestination( BoardPlayer player );
+	/// <summary>
+	/// Called every player Simulate until tile returned
+	/// </summary>
+	/// <param name="player">BoardPlayer</param>
+	/// <returns>Non-null only if tile is done processing</returns>
+	public abstract int? Process( BoardPlayer player );
 
-	public abstract void OnPlayerEnter( BoardPlayer player );
+	/// <summary>
+	/// Find BaseTile from tile number
+	/// </summary>
+	/// <param name="tileNumber">Tile number</param>
+	/// <returns>BaseTile or null</returns>
+	public static BaseTile FromTileNumber( int tileNumber )
+	{
+		foreach ( var entity in Entity.All )
+		{
+			if ( entity is BaseTile tile )
+				if ( tile.TileNumber == tileNumber )
+					return tile;
+		}
+		return null;
+	}
 }

@@ -12,11 +12,13 @@ using SandboxEditor;
 [Description( "Tile for players to stand on" )]
 public class CoinTile : BaseTile
 {
-	public override void OnPlayerDestination( BoardPlayer player )
+	public override void OnPlayerStand( BoardPlayer player )
 	{
 		player.Coins += 3;
 	}
 
-	public override void OnPlayerEnter( BoardPlayer player )
+	public override void OnPlayerPass( BoardPlayer player )
 	{ }
+
+	public override int? Process( BoardPlayer player ) => NextTile;
 }

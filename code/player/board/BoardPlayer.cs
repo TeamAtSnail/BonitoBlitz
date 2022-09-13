@@ -8,6 +8,12 @@ using Sandbox;
 
 public partial class BoardPlayer : BasePlayer
 {
+	public BoardPlayer() : base()
+	{
+		// Prepare events
+		MovementAnimationCompleteEvent += HandleMovementComplete;
+	}
+
 	public override void Initialize()
 	{
 		// Load citizen model
@@ -19,5 +25,20 @@ public partial class BoardPlayer : BasePlayer
 
 		// Dress player
 		clothing.DressEntity( this );
+	}
+
+	public override void Simulate( Client client )
+	{
+		base.Simulate( client );
+
+		MoveSimulate( client );
+		TurnSimulate( client );
+	}
+
+	public override void FrameSimulate( Client client )
+	{
+		base.FrameSimulate( client );
+
+		MoveFrameSimulate( client );
 	}
 }
