@@ -33,13 +33,13 @@ public partial class BoardPlayer
 			return;
 
 		Moves--;
-		BoardTile = BaseTile.FromTileNumber( NextTile.Value );
-		Position = BoardTile.Position;
+		Tile = BaseTile.FromTileNumber( NextTile.Value );
+		Position = Tile.Position;
 
-		BoardTile.OnPlayerPass( this );
+		Tile.OnPlayerPass( this );
 
 		if ( Moves == 0 )
-			BoardTile.OnPlayerStand( this );
+			Tile.OnPlayerStand( this );
 	}
 
 	private void TurnSimulate( Client client )
@@ -50,11 +50,11 @@ public partial class BoardPlayer
 		if ( HasMoves )
 		{
 			// Make sure we are on a BaseTile first
-			if ( BoardTile == null )
-				BoardTile = BaseTile.FromTileNumber( 0 );
+			if ( Tile == null )
+				Tile = BaseTile.FromTileNumber( 0 );
 
 			// Get next tile
-			NextTile = BoardTile.Process( this );
+			NextTile = Tile.Process( this );
 
 			if ( NextTile == null )
 				return; // If we don't have a next tile yet then wait

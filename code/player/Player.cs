@@ -18,7 +18,7 @@ public abstract partial class BasePlayer : AnimatedEntity
 	[Net]
 	public long PlayerId { get; set; }
 	[Net]
-	public BaseTile BoardTile { get; set; }
+	public BaseTile Tile { get; set; }
 
 	/// <summary>
 	/// Initial constructor for Player
