@@ -33,7 +33,9 @@ public partial class BoardPlayer
 			return;
 
 		Moves--;
-		Tile = BaseTile.FromTileNumber( NextTile.Value );
+		if ( NextTile != null )
+			Tile = BaseTile.FromTileNumber( NextTile.Value );
+
 		Position = Tile.Position;
 
 		Tile.OnPlayerPass( this );
