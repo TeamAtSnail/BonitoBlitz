@@ -8,6 +8,9 @@ using Sandbox;
 
 public partial class BoardPlayer
 {
+	[Net]
+	public BaseTile Tile { get; set; }
+	
 	/// <summary>
 	/// Moves left
 	/// </summary>

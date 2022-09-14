@@ -1,9 +1,10 @@
 /*
  * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * library used across the board gamemode & minigames
+ * - last updated indev:3
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace libgm0;
 using System;
 using Sandbox;
 
@@ -17,8 +18,6 @@ public abstract partial class BasePlayer : AnimatedEntity
 	public int Stars { get; set; }
 	[Net]
 	public long PlayerId { get; set; }
-	[Net]
-	public BaseTile Tile { get; set; }
 
 	/// <summary>
 	/// Initial constructor for Player

@@ -1,30 +1,20 @@
 /*
  * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * library used across the board gamemode & minigames
+ * - last updated indev:3
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace libgm0;
 using Sandbox;
 
 public partial class ArbCamera : CameraMode
 {
 	[Net]
-	private Vector3? NetPosition { get; set; }
+	public Vector3? NetPosition { get; set; }
 	[Net]
-	private Rotation? NetRotation { get; set; }
+	public Rotation? NetRotation { get; set; }
 	[Net]
-	private float? NetFov { get; set; }
-
-	/// <summary>
-	/// Use position, angles and FOV from a MapCamera
-	/// </summary>
-	/// <param name="camera">MapCamera</param>
-	public void SetToMapCamera( MapCamera camera )
-	{
-		NetPosition = camera.Transform.Position;
-		NetRotation = camera.Transform.Rotation;
-		NetFov = camera.CameraFieldOfView;
-	}
+	public float? NetFov { get; set; }
 
 	public ArbCamera() { }
 

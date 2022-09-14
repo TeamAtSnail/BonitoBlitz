@@ -6,7 +6,7 @@
 namespace gm0;
 using Sandbox;
 
-public partial class BoardPlayer : BasePlayer
+public partial class BoardPlayer : libgm0.BasePlayer
 {
 	public BoardPlayer() : base()
 	{

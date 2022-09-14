@@ -1,6 +1,6 @@
 /*
  * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * - last updated indev:3
  * - lotuspar, 2022 (github.com/lotuspar)
  */
 namespace gm0;
