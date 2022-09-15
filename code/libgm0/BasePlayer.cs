@@ -5,28 +5,21 @@
  * - lotuspar, 2022 (github.com/lotuspar)
  */
 namespace libgm0;
-using System;
 using Sandbox;
 
 public abstract partial class BasePlayer : AnimatedEntity
 {
 	[Net]
-	public Guid Uid { get; set; }
-	[Net]
-	public int Coins { get; set; }
-	[Net]
-	public int Stars { get; set; }
-	[Net]
-	public long PlayerId { get; set; }
+	public PlayerData Data { get; set; }
 
 	/// <summary>
 	/// Initial constructor for Player
 	/// </summary>
-	public BasePlayer()
+	public BasePlayer( PlayerData data = null )
 	{
-		Uid = Guid.NewGuid();
 		Camera = new ArbCamera();
 		Transmit = TransmitType.Always;
+		Data = data;
 	}
 
 	/// <summary>
@@ -41,7 +34,6 @@ public abstract partial class BasePlayer : AnimatedEntity
 			Client.Pawn = null;
 		}
 
-		PlayerId = client.PlayerId;
 		client.Pawn = this;
 		Initialize();
 	}

@@ -9,13 +9,24 @@ using Sandbox;
 public partial class BoardPlayer
 {
 	[Net]
-	public BaseTile Tile { get; set; }
-	
+	private BaseTile InternalTile { get; set; }
+
+	public BaseTile Tile
+	{
+		get => InternalTile;
+		set
+		{
+			InternalTile = value;
+			Data.Extensions["TileNumber"] = (value == null) ? "null" : value.TileNumber.ToString();
+		}
+	}
+
 	/// <summary>
 	/// Moves left
 	/// </summary>
 	[Net]
 	private int Moves { get; set; }
+
 	/// <summary>
 	/// Tile to move to, should be set using BaseTile.Process
 	/// </summary>

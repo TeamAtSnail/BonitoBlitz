@@ -8,7 +8,13 @@ using Sandbox;
 
 public partial class BoardPlayer : libgm0.BasePlayer
 {
-	public BoardPlayer() : base()
+	public BoardPlayer( libgm0.PlayerData data ) : base( data )
+	{
+		// Prepare events
+		MovementAnimationCompleteEvent += HandleMovementComplete;
+	}
+
+	public BoardPlayer() : base( null )
 	{
 		// Prepare events
 		MovementAnimationCompleteEvent += HandleMovementComplete;
@@ -27,17 +33,17 @@ public partial class BoardPlayer : libgm0.BasePlayer
 		clothing.DressEntity( this );
 	}
 
-	public override void Simulate( Client client )
+	public override void LibSimulate( Client client )
 	{
-		base.Simulate( client );
+		base.LibSimulate( client );
 
 		MoveSimulate( client );
 		TurnSimulate( client );
 	}
 
-	public override void FrameSimulate( Client client )
+	public override void LibFrameSimulate( Client client )
 	{
-		base.FrameSimulate( client );
+		base.LibFrameSimulate( client );
 
 		MoveFrameSimulate( client );
 	}
