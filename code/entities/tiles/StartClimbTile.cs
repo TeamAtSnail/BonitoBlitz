@@ -7,10 +7,10 @@ namespace gm0;
 using Sandbox;
 using SandboxEditor;
 
-[Library( "gm0_tile_coin" ), HammerEntity]
-[Title( "Coin Tile" ), Category( "Player" ), Icon( "place" )]
-[Description( "Tile for players to stand on" )]
-public class CoinTile : BaseTile
+[Library( "gm0_tile_start_climb" ), HammerEntity]
+[Title( "Start Climb Tile" ), Category( "Player" ), Icon( "place" )]
+[Description( "Tile for players to start climbing on (end with End Climb Tile)" )]
+public partial class StartClimbTile : BaseTile
 {
 	public override void OnPlayerStand( BoardPawn player ) => player.Data.Coins += 3;
 

@@ -6,7 +6,7 @@
 namespace gm0;
 using Sandbox;
 
-public partial class BoardPlayer
+public partial class BoardPawn
 {
 	[Net]
 	private BaseTile InternalTile { get; set; }
@@ -17,7 +17,7 @@ public partial class BoardPlayer
 		set
 		{
 			InternalTile = value;
-			Data.Extensions["TileNumber"] = (value == null) ? "null" : value.TileNumber.ToString();
+			Data.Extensions["TileName"] = (value == null) ? "null" : value.Name;
 		}
 	}
 
@@ -31,7 +31,7 @@ public partial class BoardPlayer
 	/// Tile to move to, should be set using BaseTile.Process
 	/// </summary>
 	[Net]
-	private int? NextTile { get; set; }
+	private string NextTile { get; set; } = null;
 
 	public bool HasMoves => Moves > 0;
 
@@ -48,7 +48,7 @@ public partial class BoardPlayer
 
 		Moves--;
 		if ( NextTile != null )
-			Tile = BaseTile.FromTileNumber( NextTile.Value );
+			Tile = BaseTile.FromTileName( NextTile );
 
 		Position = Tile.Position;
 
@@ -67,7 +67,7 @@ public partial class BoardPlayer
 		{
 			// Make sure we are on a BaseTile first
 			if ( Tile == null )
-				Tile = BaseTile.FromTileNumber( 0 );
+				Tile = BaseTile.FromTileName( "start" );
 
 			// Get next tile
 			NextTile = Tile.Process( this );
@@ -76,7 +76,7 @@ public partial class BoardPlayer
 				return; // If we don't have a next tile yet then wait
 
 			// Start animation to next tile
-			BeginMoveAnimation( Position, BaseTile.FromTileNumber( NextTile.Value ).Position, 0.7f );
+			StartMoving( BaseTile.FromTileName( NextTile ) );
 		}
 	}
 }

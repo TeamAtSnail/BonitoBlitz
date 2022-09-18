@@ -8,7 +8,7 @@ using Sandbox;
 
 public delegate void MovementCompleteEventHandler();
 
-public partial class BoardPlayer
+public partial class BoardPawn
 {
 	[Net]
 	private Vector3 AnimationStartPoint { get; set; }
@@ -24,36 +24,27 @@ public partial class BoardPlayer
 
 	private bool HasActiveAnimation => MoveAnimationActive;
 
-	private Vector3? preCalculatedDeltaMultiplier;
-
 	public event MovementCompleteEventHandler MovementAnimationCompleteEvent;
-
-	private Vector3 GetDeltaMultiplier()
-	{
-		if ( preCalculatedDeltaMultiplier == null )
-			preCalculatedDeltaMultiplier = (AnimationEndPoint - AnimationStartPoint) / 1;
-		return preCalculatedDeltaMultiplier.Value;
-	}
-
-	private void ResetDeltaMultiplier() => preCalculatedDeltaMultiplier = null;
 
 	private void MoveSimulate( Client client )
 	{
 		if ( !MoveAnimationActive )
 			return;
 
-		float progressMultiplier = MoveAnimationProgress / MoveAnimationLength;
-		Position = AnimationStartPoint + (GetDeltaMultiplier() * progressMultiplier);
+		if ( Tile != null )
+		{
+			Tile.UpdateMoveAnimation( this, MoveAnimationProgress / MoveAnimationLength );
+		}
 
 		// Check if animation is complete
 		if ( MoveAnimationProgress < MoveAnimationLength )
 			return;
 
 		MoveAnimationActive = false;
-		ResetDeltaMultiplier();
-		SetAnimParameter( "move_x", 0 );
-		SetAnimParameter( "move_y", 0 );
-		SetAnimParameter( "move_z", 0 );
+		if ( Tile != null )
+		{
+			Tile.EndMoveAnimation( this );
+		}
 		MovementAnimationCompleteEvent?.Invoke();
 	}
 
@@ -62,18 +53,20 @@ public partial class BoardPlayer
 		if ( !MoveAnimationActive )
 			return;
 
-		float progressMultiplier = MoveAnimationProgress / MoveAnimationLength;
-		Position = AnimationStartPoint + (GetDeltaMultiplier() * progressMultiplier);
+		if ( Tile != null )
+		{
+			Tile.UpdateMoveAnimation( this, MoveAnimationProgress / MoveAnimationLength );
+		}
 	}
 
-	private void BeginMoveAnimation( Vector3 start, Vector3 end, float length )
+	private void StartMoving( BaseTile end )
 	{
 		if ( MoveAnimationActive )
 		{
 			Log.Warning( "BeginMoveAnimation called while animation already active" );
 		}
 
-		if ( start == null )
+		if ( Tile == null )
 		{
 			Log.Error( "BeginMoveAnimation start is null!" );
 			return;
@@ -85,18 +78,13 @@ public partial class BoardPlayer
 			return;
 		}
 
-		AnimationStartPoint = start;
-		AnimationEndPoint = end;
-		MoveAnimationLength = length;
+		MoveAnimationLength = (Tile == null) ? 0.0f : Tile.AnimationSpeed;
 		MoveAnimationProgress = 0;
 
-		// Calculate delta
-		Vector3 delta = AnimationEndPoint - AnimationStartPoint;
-
-		// Set walking animation
-		SetAnimParameter( "move_x", delta.x );
-		SetAnimParameter( "move_y", delta.y );
-		SetAnimParameter( "move_z", delta.z );
+		if ( Tile != null )
+		{
+			Tile.StartMoveAnimation( this, end );
+		}
 
 		// Start animation
 		MoveAnimationActive = true;
