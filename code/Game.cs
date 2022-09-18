@@ -23,8 +23,7 @@ public partial class Gamemode0 : libgm0.Game
 
 	public override void OnAllPlayersConnected()
 	{
-		Log.Info( "yeeep" );
-
+		// todo: why isn't this working?
 		BroadcastCamera( "mc_overview" );
 
 		foreach ( var entity in Entity.All )
@@ -32,39 +31,6 @@ public partial class Gamemode0 : libgm0.Game
 			if ( entity is StartArea area )
 			{
 				MovePlayersToStartArea( area );
-			}
-		}
-	}
-
-	[ConCmd.Server( "s1" )]
-	public static void s1()
-	{
-		Log.Info( "yeeepa" );
-		BroadcastCamera( "mc_overview" );
-	}
-
-	[ConCmd.Server( "s2" )]
-	public static void s2()
-	{
-		Log.Info( "yeeepb" );
-		foreach ( var entity in Entity.All )
-		{
-			if ( entity is StartArea area )
-			{
-				MovePlayersToStartArea( area );
-			}
-		}
-	}
-
-	[ConCmd.Server( "s3" )]
-	public static void s3()
-	{
-		Log.Info( "yeeepc" );
-		foreach ( var client in Client.All )
-		{
-			if ( client.Pawn is BoardPawn player )
-			{
-				player.StartTurn();
 			}
 		}
 	}
