@@ -32,9 +32,6 @@ public partial class BoardPawn : libgm0.Pawn
 		// Load citizen model
 		Model = Model.Load( "models/citizen/citizen.vmdl" );
 
-		// Set up
-		Camera = new PointCamera();
-
 		// Load player clothing
 		ClothingContainer clothing = new();
 		clothing.LoadFromClient( Client );
