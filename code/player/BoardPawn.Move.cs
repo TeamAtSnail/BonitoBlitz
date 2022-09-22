@@ -11,16 +11,11 @@ public delegate void MovementCompleteEventHandler();
 public partial class BoardPawn
 {
 	[Net]
-	private Vector3 AnimationStartPoint { get; set; }
-	[Net]
-	private Vector3 AnimationEndPoint { get; set; }
-
-	[Net]
 	private TimeSince MoveAnimationProgress { get; set; }
 	[Net]
 	private float MoveAnimationLength { get; set; }
 	[Net]
-	private bool MoveAnimationActive { get; set; }
+	private bool MoveAnimationActive { get; set; } = false;
 
 	private bool HasActiveAnimation => MoveAnimationActive;
 
