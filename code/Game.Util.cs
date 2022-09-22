@@ -5,10 +5,37 @@
  */
 namespace gm0;
 using Sandbox;
+using System;
 using System.Linq;
 
 public partial class Gamemode0
 {
+	/// <summary>
+	/// Move all players to starting area in a circle
+	/// </summary>
+	public void MovePlayersToStart()
+	{
+		uint distance = 64;
+		float delta = 360 / Data.Players.Count * (MathF.PI / 180);
+		for ( int i = 0; i < Data.Players.Count; i++ )
+		{
+			if ( Data.Players[i].Pawn is BoardPawn player )
+			{
+				// Move player to their starting spot
+				player.Position = new( 0, 0, StartArea.Position.z )
+				{
+					x = StartArea.Position.x + MathF.Sin( delta * i ) * distance,
+					y = StartArea.Position.y + MathF.Cos( delta * i ) * distance
+				};
+
+				// Give player new camera
+				var camera = new PointCamera();
+				camera.SetToMapCamera( StartCamera );
+				player.Camera = camera;
+			}
+		}
+	}
+
 	/// <summary>
 	/// Change all player cameras to provided MapCamera
 	/// </summary>

@@ -4,7 +4,6 @@
  * - lotuspar, 2022 (github.com/lotuspar)
  */
 namespace gm0;
-using System;
 using Sandbox;
 
 public partial class Gamemode0 : libgm0.Game
@@ -54,7 +53,7 @@ public partial class Gamemode0 : libgm0.Game
 
 	public override libgm0.Pawn PlayerJoined( Client cl, libgm0.PlayerData playerData )
 	{
-		// set player
+		// Create & set player
 		var pawn = new BoardPawn( playerData );
 		cl.Pawn = pawn;
 		return pawn;
@@ -62,41 +61,12 @@ public partial class Gamemode0 : libgm0.Game
 
 	public override void OnAllPlayersConnected()
 	{
-		uint distance = 64;
-		float delta = 360 / Data.Players.Count * (MathF.PI / 180);
-		for ( int i = 0; i < Data.Players.Count; i++ )
+		if ( Data.State == libgm0.GameState.PLAYING )
 		{
-			if ( Data.Players[i].Pawn is BoardPawn player )
-			{
-				// Move player to their starting spot
-				player.Position = new( 0, 0, StartArea.Position.z )
-				{
-					x = StartArea.Position.x + MathF.Sin( delta * i ) * distance,
-					y = StartArea.Position.y + MathF.Cos( delta * i ) * distance
-				};
-
-				// Give player new camera
-				var camera = new PointCamera();
-				camera.SetToMapCamera( StartCamera );
-				player.Camera = camera;
-			}
 		}
-	}
-
-	public override void RenderHud()
-	{
-		base.RenderHud();
-
-		int line = 0;
-		foreach ( var client in Client.All )
+		else if ( Data.State == libgm0.GameState.PREPARING )
 		{
-			if ( client.Pawn is BoardPawn player )
-			{
-				DebugOverlay.ScreenText( $"Client {client.Name}", Vector2.One * 30, line++, Color.Orange );
-				DebugOverlay.ScreenText( $"   Coins {player.Data.Coins}", Vector2.One * 30, line++, Color.Cyan );
-				DebugOverlay.ScreenText( $"   Stars {player.Data.Stars}", Vector2.One * 30, line++, Color.Cyan );
-				DebugOverlay.ScreenText( $"   HasMoves {player.HasMoves}", Vector2.One * 30, line++, player.HasMoves ? Color.Green : Color.Red );
-			}
+			MovePlayersToStart();
 		}
 	}
 }
