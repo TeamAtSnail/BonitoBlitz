@@ -46,9 +46,13 @@ public partial class BoardPawn
 		if ( !Host.IsServer )
 			return;
 
-		Moves--;
 		if ( NextTile != null )
+		{
 			Tile = BaseTile.FromTileName( NextTile );
+
+			if ( Tile.IsRealTile )
+				Moves--;
+		}
 
 		Position = Tile.Position;
 

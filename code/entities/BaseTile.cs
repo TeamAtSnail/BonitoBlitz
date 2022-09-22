@@ -5,6 +5,7 @@
  */
 namespace gm0;
 using Sandbox;
+using System;
 
 /// <summary>
 /// Singular map tile entity; used to denote tile position
@@ -29,7 +30,7 @@ public abstract partial class BaseTile : Entity
 	public float AnimationSpeed { get; set; } = 0.7f;
 
 	[Net]
-	private Vector3 animationDelta { get; set; } = Vector3.Zero;
+	private Vector3 AnimationDelta { get; set; } = Vector3.Zero;
 
 	/// <summary>
 	/// Called once when a player passes this tile at any point
@@ -58,12 +59,17 @@ public abstract partial class BaseTile : Entity
 	public virtual void StartMoveAnimation( BoardPawn pawn, BaseTile endTile )
 	{
 		// Calculate delta
-		animationDelta = endTile.Position - Position;
+		AnimationDelta = endTile.Position - Position;
 
 		// Set walking animation
-		pawn.SetAnimParameter( "move_x", animationDelta.x );
-		pawn.SetAnimParameter( "move_y", animationDelta.y );
-		pawn.SetAnimParameter( "move_z", animationDelta.z );
+		pawn.SetAnimParameter( "move_x", AnimationDelta.x );
+		pawn.SetAnimParameter( "move_y", AnimationDelta.y );
+		pawn.SetAnimParameter( "move_z", AnimationDelta.z );
+
+		// Set angle
+		float rad = MathF.Atan2( endTile.Position.y - pawn.Position.y, endTile.Position.x - pawn.Position.x );
+		float deg = rad * (180 / MathF.PI);
+		pawn.Rotation = Rotation.FromYaw( deg );
 	}
 
 	/// <summary>
@@ -74,7 +80,7 @@ public abstract partial class BaseTile : Entity
 	/// <param name="progress">0-1 float progress of animation</param>
 	public virtual void UpdateMoveAnimation( BoardPawn pawn, float progress )
 	{
-		pawn.Position = Position + (animationDelta * progress);
+		pawn.Position = Position + (AnimationDelta * progress);
 	}
 
 	/// <summary>

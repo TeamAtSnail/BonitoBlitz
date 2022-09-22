@@ -12,12 +12,6 @@ using SandboxEditor;
 [Description( "Tile for players to stand on" )]
 public class EmptyTile : BaseTile
 {
-	/// <summary>
-	/// Should the tile count as a move?
-	/// </summary>
-	[Property( Title = "Is Real Tile" )]
-	public new bool IsRealTile { get; set; } = false;
-
 	public override void OnPlayerStand( BoardPawn player ) { }
 
 	public override void OnPlayerPass( BoardPawn player ) { }

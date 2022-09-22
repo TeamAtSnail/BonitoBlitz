@@ -95,6 +95,7 @@ public partial class Gamemode0 : libgm0.Game
 				DebugOverlay.ScreenText( $"Client {client.Name}", Vector2.One * 30, line++, Color.Orange );
 				DebugOverlay.ScreenText( $"   Coins {player.Data.Coins}", Vector2.One * 30, line++, Color.Cyan );
 				DebugOverlay.ScreenText( $"   Stars {player.Data.Stars}", Vector2.One * 30, line++, Color.Cyan );
+				DebugOverlay.ScreenText( $"   HasMoves {player.HasMoves}", Vector2.One * 30, line++, player.HasMoves ? Color.Green : Color.Red );
 			}
 		}
 	}
