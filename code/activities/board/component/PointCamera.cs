@@ -1,20 +1,15 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * library used across the board gamemode & minigames
- * - last updated indev:4
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace BonitoBlitz.Board;
 using Sandbox;
 
 public partial class PointCamera : CameraMode
 {
-	[Net]
-	public Vector3? NetPosition { get; set; }
-	[Net]
-	public Rotation? NetRotation { get; set; }
-	[Net]
-	public float? NetFov { get; set; }
+	[Net] public Vector3? NetPosition { get; set; }
+	[Net] public Rotation? NetRotation { get; set; }
+	[Net] public float? NetFov { get; set; }
 	public PointCamera() { }
 
 	/// <summary>

@@ -1,15 +1,13 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace BonitoBlitz.Board;
 using Sandbox;
 
 public partial class BoardPawn
 {
-	[Net]
-	private BaseTile InternalTile { get; set; }
+	[Net] private BaseTile InternalTile { get; set; }
 
 	public BaseTile Tile
 	{
@@ -17,21 +15,19 @@ public partial class BoardPawn
 		set
 		{
 			InternalTile = value;
-			Data.Extensions["TileName"] = (value == null) ? "null" : value.Name;
+			Player.SavedTileName = (value == null) ? "null" : value.Name;
 		}
 	}
 
 	/// <summary>
 	/// Moves left
 	/// </summary>
-	[Net]
-	public int Moves { get; private set; }
+	[Net] public int Moves { get; private set; }
 
 	/// <summary>
 	/// Tile to move to, should be set using BaseTile.Process
 	/// </summary>
-	[Net]
-	private string NextTile { get; set; } = null;
+	[Net] private string NextTile { get; set; } = null;
 
 	public bool HasMoves => Moves > 0;
 
@@ -62,7 +58,7 @@ public partial class BoardPawn
 			Tile.OnPlayerStand( this );
 	}
 
-	private void TurnSimulate( Client client )
+	private void TurnSimulate( Client cl )
 	{
 		if ( HasActiveAnimation )
 			return; // Wait for animation to complete

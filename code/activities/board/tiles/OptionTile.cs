@@ -1,9 +1,8 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace BonitoBlitz.Board;
 using Sandbox;
 using SandboxEditor;
 
@@ -13,11 +12,9 @@ using SandboxEditor;
 public partial class OptionTile : BaseTile
 {
 	[Property( Title = "Secondary Next Tile Name" ), FGDType( "target_destination" )]
-	[Net]
-	public string SecondaryNextTile { get; set; }
+	[Net] public string SecondaryNextTile { get; private set; }
 
-	[Net]
-	private string SelectedNextTile { get; set; }
+	[Net] public string SelectedNextTile { get; private set; }
 
 	public override void OnPlayerStand( BoardPawn player )
 	{ }

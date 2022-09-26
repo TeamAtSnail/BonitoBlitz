@@ -1,29 +1,22 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace BonitoBlitz;
 using Sandbox;
 
-public partial class Gamemode0 : libgm0.Game
+public partial class BonitoBlitz
 {
-	[ConCmd.Admin( "gm0_setmapcamera" )]
-	public static void CSvSetMapCamera( string name = "mc_overview" )
-	{
-		BroadcastCamera( name );
-	}
-
 	[ConCmd.Admin( "gm0_followme" )]
 	public static void CSvFollowMe()
 	{
 		foreach ( var client in Client.All )
 		{
-			if ( client.Pawn is BoardPawn player )
+			if ( client.Pawn is Board.BoardPawn player )
 			{
-				var camera = new FollowCamera( ConsoleSystem.Caller.Pawn )
+				var camera = new Board.FollowCamera( ConsoleSystem.Caller.Pawn )
 				{
-					FixedRotation = (Game.Current as Gamemode0).StartCamera.Rotation,
+					FixedRotation = (Game.Current as BonitoBlitz).BoardActivity.StartCamera.Rotation,
 					PositionOffset = new Vector3( 0, -200, 100 )
 				};
 				player.Camera = camera;
@@ -36,13 +29,10 @@ public partial class Gamemode0 : libgm0.Game
 	{
 		foreach ( var client in Client.All )
 		{
-			if ( client.Pawn is BoardPawn player )
+			if ( client.Pawn is Board.BoardPawn player )
 			{
 				player.StartTurn();
 			}
 		}
 	}
-
-	[ConCmd.Admin( "gm0_runstart" )]
-	public static void CSvRunStartCode() => (Game.Current as gm0.Gamemode0).OnAllPlayersConnected();
 }

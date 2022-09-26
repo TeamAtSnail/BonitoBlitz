@@ -1,27 +1,23 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace BonitoBlitz.Board;
 using Sandbox;
 
 public delegate void MovementCompleteEventHandler();
 
 public partial class BoardPawn
 {
-	[Net]
-	private TimeSince MoveAnimationProgress { get; set; }
-	[Net]
-	private float MoveAnimationLength { get; set; }
-	[Net]
-	private bool MoveAnimationActive { get; set; } = false;
+	[Net] private TimeSince MoveAnimationProgress { get; set; }
+	[Net] private float MoveAnimationLength { get; set; }
+	[Net] private bool MoveAnimationActive { get; set; } = false;
 
 	private bool HasActiveAnimation => MoveAnimationActive;
 
 	public event MovementCompleteEventHandler MovementAnimationCompleteEvent;
 
-	private void MoveSimulate( Client client )
+	private void MoveSimulate( Client cl )
 	{
 		if ( !MoveAnimationActive )
 			return;
@@ -43,7 +39,7 @@ public partial class BoardPawn
 		MovementAnimationCompleteEvent?.Invoke();
 	}
 
-	private void MoveFrameSimulate( Client client )
+	private void MoveFrameSimulate( Client cl )
 	{
 		if ( !MoveAnimationActive )
 			return;

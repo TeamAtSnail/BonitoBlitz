@@ -1,9 +1,8 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:3
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace BonitoBlitz.Board;
 using Sandbox;
 using System;
 
@@ -14,8 +13,7 @@ using System;
 public abstract partial class BaseTile : Entity
 {
 	[Property( Title = "Next Tile Name" ), FGDType( "target_destination" )]
-	[Net]
-	public string NextTile { get; set; }
+	[Net] public string NextTile { get; set; }
 
 	/// <summary>
 	/// Should the tile count as a move?
@@ -29,8 +27,7 @@ public abstract partial class BaseTile : Entity
 	[Property( Title = "Animation Speed" )]
 	public float AnimationSpeed { get; set; } = 0.7f;
 
-	[Net]
-	private Vector3 AnimationDelta { get; set; } = Vector3.Zero;
+	[Net] private Vector3 AnimationDelta { get; set; } = Vector3.Zero;
 
 	/// <summary>
 	/// Called once when a player passes this tile at any point

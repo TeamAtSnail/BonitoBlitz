@@ -1,9 +1,8 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace BonitoBlitz.Board;
 using Sandbox;
 using SandboxEditor;
 

@@ -1,9 +1,8 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
+namespace BonitoBlitz.Board;
 using Sandbox;
 using SandboxEditor;
 
@@ -26,9 +25,9 @@ public partial class StartClimbTile : BaseTile
 		pawn.SetAnimParameter( "b_swim", false );
 	}
 
-	public override void OnPlayerStand( BoardPawn player ) => player.Data.Coins += 3;
+	public override void OnPlayerStand( BoardPawn pawn ) => pawn.Player.Coins += 3;
 
-	public override void OnPlayerPass( BoardPawn player ) { }
+	public override void OnPlayerPass( BoardPawn pawn ) { }
 
-	public override string Process( BoardPawn player ) => NextTile;
+	public override string Process( BoardPawn pawn ) => NextTile;
 }

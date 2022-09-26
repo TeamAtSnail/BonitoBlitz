@@ -1,102 +1,25 @@
 /*
- * part of the gm0 (w.i.p name) gamemode
- * - last updated indev:2
+ * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace gm0;
-using System;
-using Sandbox;
+namespace BonitoBlitz;
 
-public partial class Gamemode0 : libgm0.Game
+public partial class BonitoBlitz : libblitz.Game
 {
-	[Net]
-	private StartArea StartArea { get; set; } = null;
+	public Board.BoardActivity BoardActivity;
 
-	[Net]
-	private MapCamera StartCamera { get; set; } = null;
-
-	public Gamemode0() : base( libgm0.GameData.LoadActiveGame() )
-	{ }
-
-	public override void PostLevelLoaded()
+	public override void Spawn()
 	{
-		/* Pre game checks */
-		// Entity gathering
-		foreach ( var entity in Entity.All )
+		base.Spawn();
+
+		var player = new libblitz.Player
 		{
-			// Make sure there's only 1 StartArea...
-			// (also get the StartArea)
-			if ( entity is StartArea startArea )
-			{
-				if ( StartArea != null )
-					throw new libgm0.error.GameMapException( "Map has multiple StartAreas!" );
-				StartArea = startArea;
-			}
+			DisplayName = "Test",
+			CanBeBot = false
+		};
 
-			// Make sure there's only 1 starting MapCamera...
-			// (also get the MapCamera)
-			if ( entity is MapCamera mapCamera && mapCamera.Name == "StartCamera" )
-			{
-				if ( StartCamera != null )
-					throw new libgm0.error.GameMapException( "Map has multiple cameras called StartCamera!" );
-				StartCamera = mapCamera;
-			}
-		}
+		Players.Add( player );
 
-		// Make sure we found a StartArea
-		if ( Host.IsServer && StartArea == null )
-			throw new libgm0.error.GameMapException( "Map has no StartArea!" );
-
-		// Make sure there's a camera with the name StartCamera
-		if ( Host.IsServer && StartCamera == null )
-			throw new libgm0.error.GameMapException( "Map has no camera called StartCamera!" );
-	}
-
-	public override libgm0.Pawn PlayerJoined( Client cl, libgm0.PlayerData playerData )
-	{
-		// set player
-		var pawn = new BoardPawn( playerData );
-		cl.Pawn = pawn;
-		return pawn;
-	}
-
-	public override void OnAllPlayersConnected()
-	{
-		uint distance = 64;
-		float delta = 360 / Data.Players.Count * (MathF.PI / 180);
-		for ( int i = 0; i < Data.Players.Count; i++ )
-		{
-			if ( Data.Players[i].Pawn is BoardPawn player )
-			{
-				// Move player to their starting spot
-				player.Position = new( 0, 0, StartArea.Position.z )
-				{
-					x = StartArea.Position.x + MathF.Sin( delta * i ) * distance,
-					y = StartArea.Position.y + MathF.Cos( delta * i ) * distance
-				};
-
-				// Give player new camera
-				var camera = new PointCamera();
-				camera.SetToMapCamera( StartCamera );
-				player.Camera = camera;
-			}
-		}
-	}
-
-	public override void RenderHud()
-	{
-		base.RenderHud();
-
-		int line = 0;
-		foreach ( var client in Client.All )
-		{
-			if ( client.Pawn is BoardPawn player )
-			{
-				DebugOverlay.ScreenText( $"Client {client.Name}", Vector2.One * 30, line++, Color.Orange );
-				DebugOverlay.ScreenText( $"   Coins {player.Data.Coins}", Vector2.One * 30, line++, Color.Cyan );
-				DebugOverlay.ScreenText( $"   Stars {player.Data.Stars}", Vector2.One * 30, line++, Color.Cyan );
-				DebugOverlay.ScreenText( $"   HasMoves {player.HasMoves}", Vector2.One * 30, line++, player.HasMoves ? Color.Green : Color.Red );
-			}
-		}
+		BoardActivity = new( Players );
 	}
 }
