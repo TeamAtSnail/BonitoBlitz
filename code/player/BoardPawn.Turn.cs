@@ -25,7 +25,7 @@ public partial class BoardPawn
 	/// Moves left
 	/// </summary>
 	[Net]
-	private int Moves { get; set; }
+	public int Moves { get; private set; }
 
 	/// <summary>
 	/// Tile to move to, should be set using BaseTile.Process

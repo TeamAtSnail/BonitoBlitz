@@ -23,6 +23,13 @@ public partial class BoardPawn : libgm0.Pawn
 	{
 		// Prepare events
 		MovementAnimationCompleteEvent += HandleMovementComplete;
+
+		// Load tile
+		if ( data.Extensions.ContainsKey( "TileName" ) )
+		{
+			InternalTile = BaseTile.FromTileName( data.Extensions["TileName"] );
+			StartMoving( InternalTile ); // TODO: figure out why just setting Position won't work
+		}
 	}
 
 	public override void OnClientActive( Client client )

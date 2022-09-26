@@ -33,7 +33,7 @@ public partial class OptionTile : BaseTile
 			return (Rand.Int( 0, 1 ) == 0) ? NextTile : SecondaryNextTile;
 
 		if ( Input.Pressed( InputButton.Left ) )
-			SelectedNextTile = SecondaryNextTile;
+			SelectedNextTile = NextTile;
 
 		if ( Input.Pressed( InputButton.Right ) )
 			SelectedNextTile = SecondaryNextTile;
