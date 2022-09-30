@@ -2,26 +2,27 @@
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace BonitoBlitz;
+using System.Collections.Generic;
 using Sandbox;
+
+namespace BonitoBlitz;
 
 public partial class BonitoBlitz
 {
-	[ConCmd.Admin( "gm0_followme" )]
-	public static void CSvFollowMe()
+
+	[ConCmd.Admin( "gm0_becomeroller" )]
+	public static void CSvBecomeRoller( string playerName )
 	{
-		foreach ( var client in Client.All )
+		foreach ( var player in (Game.Current as BonitoBlitz).Players )
 		{
-			if ( client.Pawn is Board.BoardPawn player )
+			if ( player.Client.Name == playerName )
 			{
-				var camera = new Board.FollowCamera( ConsoleSystem.Caller.Pawn )
-				{
-					FixedRotation = (Game.Current as BonitoBlitz).BoardActivity.StartCamera.Rotation,
-					PositionOffset = new Vector3( 0, -200, 100 )
-				};
-				player.Camera = camera;
+				Log.Info( $"CSvBecomeRoller creating activity for: {player}" );
+				Current.SetActivity( new Board.RollingActivity( player ) );
+				return;
 			}
 		}
+		Log.Info( "Player not found" );
 	}
 
 	[ConCmd.Admin( "gm0_startallturns" )]
@@ -31,7 +32,7 @@ public partial class BonitoBlitz
 		{
 			if ( client.Pawn is Board.BoardPawn player )
 			{
-				player.StartTurn();
+				player.StartTurn(Rand.Int(0, 10));
 			}
 		}
 	}

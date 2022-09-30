@@ -2,8 +2,9 @@
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace BonitoBlitz.Board.Error;
 using System;
+
+namespace BonitoBlitz.Board.Error;
 
 public class GameMapException : Exception
 {

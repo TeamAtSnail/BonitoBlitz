@@ -2,16 +2,19 @@
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace BonitoBlitz.Board;
 using System;
 using System.Collections.Generic;
 using Sandbox;
 
-public partial class BoardActivity : libblitz.Activity<BoardPawn>
-{
-	[Net] public StartArea StartArea { get; private set; } = null;
+namespace BonitoBlitz.Board;
 
+public partial class BoardActivity : libblitz.Activity
+{
+	public override Type PawnType => typeof( BoardPawn );
+	public override Type HudPanelType => typeof( BoardUiPanel );
+	[Net] public StartArea StartArea { get; private set; } = null;
 	[Net] public MapCamera StartCamera { get; private set; } = null;
+	public BoardUiPanel Ui;
 
 	public BoardActivity( IList<libblitz.Player> players ) : base( players )
 	{
@@ -21,10 +24,22 @@ public partial class BoardActivity : libblitz.Activity<BoardPawn>
 	{
 	}
 
-	public override void ClientInitialize() { }
+	public override void ActivityActive()
+	{
+		base.ActivityActive();
+
+		if ( Host.IsClient )
+			libblitz.Game.Current.SetPanel( Ui );
+	}
 
 	public override void Initialize()
 	{
+		if ( Host.IsClient )
+		{
+			Ui = new();
+			return;
+		}
+
 		/* Pre game checks */
 		// Entity gathering
 		foreach ( var entity in Entity.All )
@@ -59,7 +74,6 @@ public partial class BoardActivity : libblitz.Activity<BoardPawn>
 		// Prepare all players
 		uint distance = 64;
 		float delta = 360 / Players.Count * (MathF.PI / 180);
-
 		for ( int i = 0; i < Players.Count; i++ )
 		{
 			libblitz.Player player = Players[i];

@@ -2,9 +2,10 @@
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace BonitoBlitz.Board;
 using Sandbox;
 using SandboxEditor;
+
+namespace BonitoBlitz.Board;
 
 [Library( "gm0_tile_option" ), HammerEntity]
 [Title( "Option Tile" ), Category( "Player" ), Icon( "place" )]

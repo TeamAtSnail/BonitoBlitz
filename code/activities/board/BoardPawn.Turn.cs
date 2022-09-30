@@ -2,8 +2,9 @@
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace BonitoBlitz.Board;
 using Sandbox;
+
+namespace BonitoBlitz.Board;
 
 public partial class BoardPawn
 {
@@ -31,10 +32,10 @@ public partial class BoardPawn
 
 	public bool HasMoves => Moves > 0;
 
-	public void StartTurn()
+	public void StartTurn( int moves )
 	{
-		Moves = Rand.Int( 1, 7 );
-		DebugOverlay.ScreenText( $"Moving {Moves} space(s)!", Vector2.One * 150, 0, Color.Cyan, 4.0f );
+		Moves = moves;
+		DebugOverlay.ScreenText( $"Moving {Moves} space(s)!", Vector2.One * 300, 3, Color.Cyan, 4.0f );
 	}
 
 	private void HandleMovementComplete()

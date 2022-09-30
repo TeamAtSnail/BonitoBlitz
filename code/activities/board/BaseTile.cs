@@ -2,9 +2,10 @@
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace BonitoBlitz.Board;
 using Sandbox;
 using System;
+
+namespace BonitoBlitz.Board;
 
 /// <summary>
 /// Singular map tile entity; used to denote tile position

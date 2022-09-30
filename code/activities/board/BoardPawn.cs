@@ -2,8 +2,9 @@
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
-namespace BonitoBlitz.Board;
 using Sandbox;
+
+namespace BonitoBlitz.Board;
 
 public partial class BoardPawn : AnimatedEntity
 {
@@ -20,7 +21,7 @@ public partial class BoardPawn : AnimatedEntity
 		}
 	}
 
-	public BoardPawn( libblitz.Player player )
+	public BoardPawn( libblitz.Player player ) : base()
 	{
 		Player = player;
 
@@ -33,21 +34,22 @@ public partial class BoardPawn : AnimatedEntity
 			InternalTile = BaseTile.FromTileName( player.SavedTileName );
 			StartMoving( InternalTile ); // TODO: figure out why just setting Position won't work
 		}
-	}
-
-	public override void OnClientActive( Client cl )
-	{
-		base.OnClientActive( cl );
 
 		// Load citizen model
-		Model = Model.Load( "models/citizen/citizen.vmdl" );
 
 		// Load player clothing
-		ClothingContainer clothing = new();
-		clothing.LoadFromClient( cl );
+		//ClothingContainer clothing = new();
+		//clothing.LoadFromClient( Player.Client );
 
 		// Dress player
 		//clothing.DressEntity( this );
+	}
+
+	public override void Spawn()
+	{
+		base.Spawn();
+
+		SetModel( "models/sbox_props/watermelon/watermelon.vmdl" );
 	}
 
 	public BoardPawn() : base( null )
