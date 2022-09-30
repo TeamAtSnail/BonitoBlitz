@@ -36,20 +36,21 @@ public partial class BoardPawn : AnimatedEntity
 		}
 
 		// Load citizen model
+		SetModel( "models/citizen/citizen.vmdl" );
 
 		// Load player clothing
-		//ClothingContainer clothing = new();
-		//clothing.LoadFromClient( Player.Client );
+		ClothingContainer clothing = new();
+		clothing.LoadFromClient( Player.Client );
 
 		// Dress player
-		//clothing.DressEntity( this );
+		clothing.DressEntity( this );
 	}
 
-	public override void Spawn()
+	public override void Spawn(  )
 	{
-		base.Spawn();
+		base.Spawn( );
 
-		SetModel( "models/sbox_props/watermelon/watermelon.vmdl" );
+		SetModel( "models/citizen/citizen.vmdl" );
 	}
 
 	public BoardPawn() : base( null )
