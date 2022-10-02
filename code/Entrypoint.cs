@@ -16,6 +16,10 @@ public partial class Entrypoint : libblitz.Game
 		// Log some game info in console
 		Log.Info( $"BonitoBlitz - development version (https://github.com/lotuspar/BonitoBlitz)" );
 		Log.Info( $"Running {(Sandbox.Host.IsClient ? "clientside" : "serverside")} on {DateTime.Now.ToShortDateString()}" );
+
+		// Add debug panel
+		if ( Sandbox.Host.IsClient )
+			RootPanel.AddChild<SharedUi.Debug>();
 	}
 
 	/// <summary>
