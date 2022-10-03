@@ -16,4 +16,6 @@ public partial class BoardPawn : AnimatedEntity
 	{
 		Player = player;
 	}
+
+	public BoardPawn() : base() {}
 }
