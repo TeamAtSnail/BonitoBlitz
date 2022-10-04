@@ -28,12 +28,17 @@ public partial class Entrypoint : libblitz.Game
 	/// </summary>
 	public void StartGame()
 	{
+		// Set game to initial status
+		Status = libblitz.GameStatus.INTRODUCTION_NEEDED;
+
 		// Create activity instances
 		AddActivity( new CoreActivities.MainMenuActivity() );
+		AddActivity( new CoreActivities.Board.BoardActivity() );
 
 		// Set up the game
 		// (placeholder): for now just go to the mainmenu no matter what
 		SetActivityByType<CoreActivities.MainMenuActivity>();
+		SetActivityByType<CoreActivities.Board.BoardActivity>();
 	}
 
 	[Sandbox.ConCmd.Server( "bb_popl" )]
@@ -51,11 +56,24 @@ public partial class Entrypoint : libblitz.Game
 		}
 	}
 
-
 	[Sandbox.ConCmd.Server( "bb_start" )]
 	public static void ForceStart()
 	{
 		var entrypoint = Sandbox.Game.Current as Entrypoint;
 		entrypoint.StartGame();
+	}
+
+	[Sandbox.ConCmd.Server( "bb_save" )]
+	public static void ForceSave()
+	{
+		var entrypoint = Sandbox.Game.Current as Entrypoint;
+		entrypoint.Save();
+	}
+
+	[Sandbox.ConCmd.Server( "bb_load" )]
+	public static void ForceLoad()
+	{
+		var entrypoint = Sandbox.Game.Current as Entrypoint;
+		entrypoint.Load( entrypoint.Uid );
 	}
 }
