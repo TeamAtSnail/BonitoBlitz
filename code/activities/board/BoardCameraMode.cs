@@ -18,23 +18,23 @@ public partial class BoardCameraMode : CameraMode
 {
 	public BoardCameraMode() { }
 
-	[Net]
+	[Net, Local]
 	public Entity Target { get; private set; } = null;
 
-	[Net]
+	[Net, Local]
 	public BoardCameraModeState State { get; private set; } = BoardCameraModeState.ABSOLUTE;
 
 	[Net]
-	public Vector3 FollowOffset { get; set; } = Vector3.Zero;
+	public Vector3 FollowOffset { get; set; }
 
 	[Net]
-	public Rotation FollowRotationOffset { get; set; } = Rotation.Identity;
+	public Rotation FollowRotationOffset { get; set; }
 
 	/// <summary>
 	/// Position offset to add after rotation is calculated
 	/// </summary>
 	[Net]
-	public Vector3 FollowPostOffset { get; set; } = Vector3.Zero;
+	public Vector3 FollowPostOffset { get; set; }
 
 	/// <summary>
 	/// Set camera to absolute position / rotation
@@ -57,11 +57,11 @@ public partial class BoardCameraMode : CameraMode
 	/// <param name="postOffset">Position offset to add after rotation has been calculated</param>
 	public void SetFollow( Entity target, Vector3? positionOffset = null, Rotation? rotationOffset = null, Vector3? postOffset = null )
 	{
+		Target = target;
 		State = BoardCameraModeState.FOLLOWING;
 		FollowOffset = positionOffset ?? Vector3.Zero;
-		FollowRotationOffset = rotationOffset ?? Rotation.Identity;
+		FollowRotationOffset = rotationOffset ?? new Rotation( 0, 0, 0, 0 );
 		FollowPostOffset = postOffset ?? Vector3.Zero;
-		Target = target;
 	}
 
 	/// <summary>
@@ -70,8 +70,8 @@ public partial class BoardCameraMode : CameraMode
 	/// <param name="target">Entity</param>
 	public void SetReplicated( Entity target )
 	{
-		State = BoardCameraModeState.REPLICATE;
 		Target = target;
+		State = BoardCameraModeState.REPLICATE;
 	}
 
 	public override void Update()
@@ -84,15 +84,15 @@ public partial class BoardCameraMode : CameraMode
 			return;
 		}
 
-		if ( State == BoardCameraModeState.REPLICATE )
+		if ( Target != null && State == BoardCameraModeState.REPLICATE )
 		{
 			Position = Target.Position;
 			Rotation = Target.Rotation;
 		}
-		else if ( State == BoardCameraModeState.FOLLOWING )
+		else if ( Target != null && State == BoardCameraModeState.FOLLOWING )
 		{
 			Position = Target.Position + FollowOffset;
-			Rotation = Rotation.LookAt( Position ) + FollowRotationOffset;
+			Rotation = Rotation.LookAt( Target.Position - Position ) + FollowRotationOffset;
 			Position += FollowPostOffset;
 		}
 	}
