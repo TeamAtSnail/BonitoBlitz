@@ -37,7 +37,10 @@ public partial class Glyph : Panel
 		if ( !HasButton )
 			return;
 		Image.Texture = Input.GetGlyph( Button, ButtonSize, GlyphStyle.Knockout );
-		Image.Style.Height = Image.ComputedStyle.FontSize ?? Image.Texture.Height;
+		if ( Image.ComputedStyle != null )
+			Image.Style.Height = Image.ComputedStyle.FontSize ?? Image.Texture.Height;
+		else
+			Image.Style.Height = Image.Texture.Height;
 		Image.Style.AspectRatio = (float)Image.Texture.Width / Image.Texture.Height;
 	}
 }
