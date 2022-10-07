@@ -11,11 +11,25 @@ namespace BonitoBlitz;
 
 public partial class Entrypoint : libblitz.Game
 {
+	[Sandbox.Net]
+	public GameConfiguration GameConfiguration { get; private set; } = null;
+
 	public Entrypoint()
 	{
 		// Log some game info in console
 		Log.Info( $"BonitoBlitz - development version (https://github.com/lotuspar/BonitoBlitz)" );
 		Log.Info( $"Running {(Sandbox.Host.IsClient ? "clientside" : "serverside")} on {DateTime.Now.ToShortDateString()}" );
+
+		// Set game configuration
+		foreach ( var entity in Sandbox.Entity.All )
+		{
+			if ( entity is GameConfiguration gameConfiguration )
+				GameConfiguration = gameConfiguration;
+		}
+
+		// Make sure game configuration found
+		if ( GameConfiguration == null )
+			throw new Exception( "No game configuration entity found on map" );
 
 		// Add debug panel
 		if ( Sandbox.Host.IsClient )
@@ -37,7 +51,7 @@ public partial class Entrypoint : libblitz.Game
 
 		// Set up the game
 		// (placeholder): for now just go to the mainmenu no matter what
-		SetActivityByType<CoreActivities.MainMenuActivity>();
+		//SetActivityByType<CoreActivities.MainMenuActivity>();
 		SetActivityByType<CoreActivities.Board.BoardActivity>();
 	}
 
@@ -54,6 +68,13 @@ public partial class Entrypoint : libblitz.Game
 			player.SetClient( client );
 			entrypoint.Players.Add( player );
 		}
+
+		var bot = new libblitz.Player
+		{
+			DisplayName = "Flanders",
+			CanBeBot = true,
+		};
+		entrypoint.Players.Add( bot );
 	}
 
 	[Sandbox.ConCmd.Server( "bb_start" )]
