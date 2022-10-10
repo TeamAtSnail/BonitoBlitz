@@ -14,6 +14,24 @@ namespace BonitoBlitz;
 [Description( "Game configuration. Needs to be set per-map" )]
 public partial class GameConfiguration : Entity
 {
+	private static GameConfiguration instance = null;
+	public static GameConfiguration Instance
+	{
+		get
+		{
+			if ( instance == null )
+			{
+				foreach ( var entity in Entity.All.OfType<GameConfiguration>() )
+				{
+					if ( instance != null )
+						throw new Exception( "Multiple GameConfigurations on map" );
+					instance = entity;
+				}
+			}
+			return instance;
+		}
+	}
+
 	/// <summary>
 	/// Confirm configuration
 	/// </summary>
