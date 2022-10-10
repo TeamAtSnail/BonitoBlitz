@@ -1,0 +1,26 @@
+Debug {
+    /* Put in top right */
+    position: absolute;
+    height: 30%;
+    top: 0px;
+    right: 0px;
+
+    /* Tiny bit of padding */
+    padding: 5px;
+
+    /* Default font size */
+    font-size: 1vw;
+
+    /* Display elements top to bottom */
+    display: flex;
+    flex-direction: column;
+}
+
+.default {
+    color: white;
+}
+
+.header {
+    color: aquamarine;
+    font-weight: bold;
+}

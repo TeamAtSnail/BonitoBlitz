@@ -1,22 +1,28 @@
 /*
+ * BoardActivity.cs
+ * Core activity for the game board experience
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
 using System;
 using System.Collections.Generic;
-using Sandbox;
+using System.Linq;
+using libblitz;
 
-namespace BonitoBlitz.Board;
+namespace BonitoBlitz.CoreActivities.Board;
 
-public partial class BoardActivity : libblitz.Activity
+public partial class BoardActivity : Activity
 {
 	public override Type PawnType => typeof( BoardPawn );
-	public override Type HudPanelType => typeof( BoardUiPanel );
-	[Net] public StartArea StartArea { get; private set; } = null;
-	[Net] public MapCamera StartCamera { get; private set; } = null;
-	public BoardUiPanel Ui;
 
-	public BoardActivity( IList<libblitz.Player> players ) : base( players )
+	public override Type HudPanelType => null;
+
+	[Sandbox.Net]
+	public Player CurrentPlayer { get; private set; } = null;
+
+	public static int TurnsLeft { get => Game.Current.TurnsLeft; set => Game.Current.TurnsLeft = value; }
+
+	public BoardActivity( List<Player> players ) : base( players )
 	{
 	}
 
@@ -24,74 +30,156 @@ public partial class BoardActivity : libblitz.Activity
 	{
 	}
 
-	public override void ActivityActive()
+	/// <summary>
+	/// Get the player whose turn should be next
+	/// </summary>
+	/// <param name="currentPlayerUid">UID of the player currently having their turn</param>
+	/// <returns>Player up next (if none found the first player in line is returned)</returns>
+	public Player GetNextInLine( Guid currentPlayerUid )
 	{
-		base.ActivityActive();
+		if ( Players.Count == 1 )
+			return Players[0]; // Just return only player if needed
 
-		if ( Host.IsClient )
-			libblitz.Game.Current.SetPanel( Ui );
+		Player currentPlayer = null;
+		foreach ( var player in Players )
+		{
+			if ( player.Uid != currentPlayerUid )
+				continue;
+			currentPlayer = player;
+			break;
+		}
+
+		Player result = null;
+		foreach ( var player in Players )
+		{
+			if ( player.TurnOrderIndex <= currentPlayer.TurnOrderIndex )
+				continue;
+
+			if ( result == null || player.TurnOrderIndex <= result.TurnOrderIndex )
+			{
+				result = player;
+			}
+		}
+
+		if ( result != null && result.Uid == currentPlayerUid )
+		{
+			// Same player was found, no player comes after
+			Log.Info( $"( result != null && result.Uid == currentPlayerUid )" );
+			return GetFirstInLine(); // Just return first player
+		}
+
+		if ( result == null )
+			return GetFirstInLine(); // Just return first player
+
+		return result;
+	}
+
+	/// <summary>
+	/// Get first player in line
+	/// </summary>
+	/// <returns>Player (or null)</returns>
+	public Player GetFirstInLine()
+	{
+		Player result = null;
+		foreach ( var player in Players )
+		{
+			if ( result == null || player.TurnOrderIndex <= result.TurnOrderIndex )
+			{
+				result = player;
+			}
+		}
+		return result;
+	}
+
+	/// <summary>
+	/// This being called means we are either:
+	/// 1. just starting the game for the first time
+	/// 2. starting a new game turn
+	/// 3. moving to the next players turn
+	/// </summary>
+	public override void ActivityActive( string previous, string result )
+	{
+		base.ActivityActive( previous, result );
+
+		switch ( Game.Current.Status )
+		{
+			case GameStatus.NONE:
+				throw new InvalidOperationException( "Tried to proceed with game that hasn't started." );
+
+			case GameStatus.INTRODUCTION_NEEDED:
+				// (placeholder): just set the game status to in progress and restart activity
+				Log.Info( "INTRO SHOULD START RIGHT NOW!!!" );
+
+				// (sorta placeholder): set map camera to (single) board camera on map
+				var camera = All.OfType<BoardCamera>().Single();
+				foreach ( var player in Players )
+				{
+					(player.Pawn as BoardPawn).Camera.SetReplicated( camera );
+				}
+
+				// set all player starting tiles to correct tile
+				foreach ( var player in Players )
+				{
+					player.SavedTileName = GameConfiguration.Instance.InitialTileName;
+					player.Pawn.Position = GameConfiguration.Instance.InitialTile.Position;
+				}
+
+				if ( Sandbox.Host.IsClient )
+					return;
+
+				TurnsLeft = 15;
+				Game.Current.Status = GameStatus.IN_PROGRESS;
+				Game.Current.SetActivityByType<BoardActivity>();
+				break;
+
+			case GameStatus.IN_PROGRESS:
+				if ( Sandbox.Host.IsClient )
+					return;
+
+				var first = GetFirstInLine();
+
+				// Make sure we have a current player
+				if ( CurrentPlayer == null )
+					CurrentPlayer = first;
+				else
+					CurrentPlayer = GetNextInLine( CurrentPlayer.Uid );
+
+				// Check for new turn
+				if ( CurrentPlayer == first )
+				{
+					// First player of this turn
+					TurnsLeft--;
+					Log.Info( $"New turn... {TurnsLeft}" );
+				}
+				else
+				{
+					Log.Info( $"Continuing turn... player: {CurrentPlayer}" );
+				}
+
+				// Check for game complete / game in-progress
+				if ( TurnsLeft <= 0 )
+				{
+					// (placeholder): game complete logic
+					Game.Current.Status = GameStatus.COMPLETED;
+				}
+				else
+				{
+					// (placeholder): game turn logic
+					Game.Current.SetActivity( new PlayerTurnActivity( CurrentPlayer ) );
+				}
+				break;
+		}
 	}
 
 	public override void Initialize()
 	{
-		if ( Host.IsClient )
-		{
-			Ui = new();
+		if ( Sandbox.Host.IsClient )
 			return;
-		}
 
-		/* Pre game checks */
-		// Entity gathering
-		foreach ( var entity in Entity.All )
+		// Just create our pawns
+		foreach ( var player in Players )
 		{
-			// Make sure there's only 1 StartArea...
-			// (also get the StartArea)
-			if ( entity is StartArea startArea )
-			{
-				if ( StartArea != null )
-					throw new Error.GameMapException( "Map has multiple StartAreas!" );
-				StartArea = startArea;
-			}
-
-			// Make sure there's only 1 starting MapCamera...
-			// (also get the MapCamera)
-			if ( entity is MapCamera mapCamera && mapCamera.Name == "StartCamera" )
-			{
-				if ( StartCamera != null )
-					throw new Error.GameMapException( "Map has multiple cameras called StartCamera!" );
-				StartCamera = mapCamera;
-			}
-		}
-
-		// Make sure we found a StartArea
-		if ( Host.IsServer && StartArea == null )
-			throw new Error.GameMapException( "Map has no StartArea!" );
-
-		// Make sure there's a camera with the name StartCamera
-		if ( Host.IsServer && StartCamera == null )
-			throw new Error.GameMapException( "Map has no camera called StartCamera!" );
-
-		// Prepare all players
-		uint distance = 64;
-		float delta = 360 / Players.Count * (MathF.PI / 180);
-		for ( int i = 0; i < Players.Count; i++ )
-		{
-			libblitz.Player player = Players[i];
-			var pawn = new BoardPawn( player )
-			{
-				Position = new( 0, 0, StartArea.Position.z )
-				{
-					x = StartArea.Position.x + MathF.Sin( delta * i ) * distance,
-					y = StartArea.Position.y + MathF.Cos( delta * i ) * distance
-				}
-			};
-
-			// Give pawn new camera
-			var camera = new PointCamera();
-			camera.SetToMapCamera( StartCamera );
-			pawn.Camera = camera;
-
-			// Set player pawn
+			var pawn = new BoardPawn( player );
 			player.Pawn = pawn;
 		}
 	}

@@ -1,22 +1,24 @@
 /*
+ * BoardPawn.cs
+ * Core pawn for the game board experience
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
 using Sandbox;
 
-namespace BonitoBlitz.Board;
+namespace BonitoBlitz.CoreActivities.Board;
 
 public partial class BoardPawn : AnimatedEntity
 {
 	[Net] public libblitz.Player Player { get; private set; }
 
-	public CameraMode Camera
+	public BoardCameraMode Camera
 	{
-		get => Components.Get<CameraMode>();
+		get => Components.Get<BoardCameraMode>();
 		set
 		{
 			if ( Camera == value ) return;
-			Components.RemoveAny<CameraMode>();
+			Components.RemoveAny<BoardCameraMode>();
 			Components.Add( value );
 		}
 	}
@@ -25,52 +27,24 @@ public partial class BoardPawn : AnimatedEntity
 	{
 		Player = player;
 
-		// Prepare events
-		MovementAnimationCompleteEvent += HandleMovementComplete;
+		Camera = new BoardCameraMode();
 
-		// Load tile
-		if ( player.SavedTileName != null )
+		if ( Player.Client != null )
 		{
-			InternalTile = BaseTile.FromTileName( player.SavedTileName );
-			StartMoving( InternalTile ); // TODO: figure out why just setting Position won't work
-		}
+			// Load player clothing
+			ClothingContainer clothing = new();
+			clothing.LoadFromClient( Player.Client );
 
+			// Dress player
+			clothing.DressEntity( this );
+		}
+	}
+
+	public BoardPawn() : base() { }
+
+	public override void Spawn()
+	{
 		// Load citizen model
 		SetModel( "models/citizen/citizen.vmdl" );
-
-		// Load player clothing
-		ClothingContainer clothing = new();
-		clothing.LoadFromClient( Player.Client );
-
-		// Dress player
-		clothing.DressEntity( this );
-	}
-
-	public override void Spawn(  )
-	{
-		base.Spawn( );
-
-		SetModel( "models/citizen/citizen.vmdl" );
-	}
-
-	public BoardPawn() : base( null )
-	{
-		// Prepare events
-		MovementAnimationCompleteEvent += HandleMovementComplete;
-	}
-
-	public override void Simulate( Client cl )
-	{
-		base.Simulate( cl );
-
-		MoveSimulate( cl );
-		TurnSimulate( cl );
-	}
-
-	public override void FrameSimulate( Client cl )
-	{
-		base.FrameSimulate( cl );
-
-		MoveFrameSimulate( cl );
 	}
 }
