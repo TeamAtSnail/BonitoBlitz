@@ -30,6 +30,8 @@ public partial class BoardCameraMode : CameraMode
 	[Net]
 	public Rotation FollowRotationOffset { get; set; }
 
+	public const float FollowSpeed = 5.0f;
+
 	/// <summary>
 	/// Position offset to add after rotation is calculated
 	/// </summary>
@@ -91,8 +93,8 @@ public partial class BoardCameraMode : CameraMode
 		}
 		else if ( Target != null && State == BoardCameraModeState.FOLLOWING )
 		{
-			Position = Target.Position + FollowOffset;
-			Rotation = Rotation.LookAt( Target.Position - Position ) + FollowRotationOffset;
+			Position = Vector3.Lerp( Position, Target.Position + FollowOffset, FollowSpeed * Time.Delta );
+			Rotation = Rotation.Lerp( Rotation, Rotation.LookAt( Target.Position - Position ) + FollowRotationOffset, FollowSpeed * Time.Delta );
 			Position += FollowPostOffset;
 		}
 	}
