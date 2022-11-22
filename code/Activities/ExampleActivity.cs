@@ -12,7 +12,7 @@ public class ExampleActivity : libblitz.Activity
 
 	/// <summary>
 	/// This is for data you want to pass to the next activity.
-	/// Create an instance of this and provide it when using PushActivity / PopActivity
+	/// Create an instance of this and provide it to PushActivity / PopActivity
 	/// </summary>
 	public class Result : libblitz.ActivityResult
 	{
