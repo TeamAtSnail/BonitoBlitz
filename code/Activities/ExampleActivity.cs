@@ -20,6 +20,14 @@ public class ExampleActivity : libblitz.Activity
 	}
 
 	/// <summary>
+	/// This is for data being provided to this activity.
+	/// Other activities can inherit from this Expectation to make passing data to this activity easier.
+	/// </summary>
+	public abstract class Expectation : libblitz.ActivityResult
+	{
+	}
+
+	/// <summary>
 	/// Called serverside when the activity is ready to start.
 	/// </summary>
 	/// <param name="result">Result of previous activity or null</param>
