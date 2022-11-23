@@ -4,7 +4,7 @@ namespace BonitoBlitz.Activities;
 
 public partial class BoardPawn : AnimatedEntity
 {
-	[Net] public libblitz.GameMember GameMember { get; init; }
+	[Net] public libblitz.GameMember GameMember { get; private set; }
 
 	public BoardPawn( libblitz.GameMember gameMember )
 	{
