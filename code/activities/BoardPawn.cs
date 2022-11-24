@@ -40,6 +40,13 @@ public partial class BoardPawn : AnimatedEntity
 		EnableShadowInFirstPerson = true;
 
 		Transmit = TransmitType.Always;
+
+		// Go to tile position
+		var tile = GameMember.CurrentTile;
+		if ( tile != null )
+		{
+			Position = GameMember.CurrentTile.Position;
+		}
 	}
 
 	/// <summary>

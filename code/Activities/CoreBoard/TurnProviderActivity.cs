@@ -6,11 +6,11 @@ using Game = libblitz.Game;
 
 namespace BonitoBlitz.Activities.CoreBoard;
 
-public class TurnControllerActivity : libblitz.Activity
+public class TurnProviderActivity : libblitz.Activity
 {
 	/* These constructors are required! */
-	public TurnControllerActivity( ActivityDescription d ) : base( d ) { }
-	public TurnControllerActivity() { }
+	public TurnProviderActivity( ActivityDescription d ) : base( d ) { }
+	public TurnProviderActivity() { }
 
 	/// <summary>
 	/// This is for data you want to pass to the next activity.
@@ -18,7 +18,6 @@ public class TurnControllerActivity : libblitz.Activity
 	/// </summary>
 	public class Result : libblitz.ActivityResult
 	{
-		public int MyValue = 123;
 	}
 
 	/// <summary>
@@ -29,14 +28,13 @@ public class TurnControllerActivity : libblitz.Activity
 	{
 		base.ActivityStart( result );
 
-		Log.Info( $"Hello from TurnControllerActivity.ActivityStart! I'm running on the {Host.Name}" );
 		Log.Info( "Selecting random actor..." );
 
 		var actor = Actors.OrderBy( qu => Guid.NewGuid() ).First();
-		Log.Info( $"Selected actor {actor.Uid} / {actor.Client.Name}" );
+		Log.Info( $"Selected random actor {actor.Uid} / {actor.Client.Name}" );
 
 		// We are done here! Move to the next activity...
-		var description = CreateDescription().Transform( "PlayerTurnActivity" );
+		var description = CreateDescription().Transform<PlayerRollActivity>();
 
 		// Push the next activity onto the Activity Stack
 		Game.Current.PushActivity( description, new Result() );
