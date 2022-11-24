@@ -68,9 +68,12 @@ public partial class BatchMoveActivity : libblitz.Activity
 	[Net] protected float EndTime { get; set; }
 
 	private int _moves;
+
 	private bool _complete; // this sucks
 
 	private readonly List<AnimationPlaybackPart> _playbackData = new();
+	private int _completedPlaybackParts = 0;
+	private bool PlaybackComplete => _completedPlaybackParts == _playbackData.Count;
 
 	/// <summary>
 	/// Create playback data from all animation parts
@@ -162,30 +165,38 @@ public partial class BatchMoveActivity : libblitz.Activity
 			return;
 		}
 
-		if ( Time.Now > EndTime )
+		// Check for complete playback
+		// 1. Current time must be after EndTime
+		// 2. PlaybackComplete (all playback parts done) true
+		if ( Time.Now > EndTime && PlaybackComplete )
 		{
 			if ( !Host.IsServer )
 			{
 				return;
 			}
 
-			// This activity has done what is needed
-			Game.Current.PopActivity( new Result() { Moves = _moves - AnimationParts.Count } ); // todo: this sucks
+			// Pop!
+			Game.Current.PopActivity( new Result() { Moves = _moves - _completedPlaybackParts } );
 			_complete = true;
 
 			return;
 		}
 
-		foreach ( var data in _playbackData.Where( data => !data.HasFinished ) )
+		foreach ( var data in _playbackData )
 		{
+			if ( data.HasFinished )
+			{
+				continue;
+			}
+
 			if ( !data.HasStarted && Time.Now > data.Part.Time )
 			{
-				// if animation hasn't started and it should be...
+				// start animation!
 				data.HasStarted = true;
 
-				if ( data.Tile is IBasicAnimationTile basicAnimationTile )
+				if ( data.Tile is IBasicAnimationTile bat )
 				{
-					basicAnimationTile.StartAnimation( _actor, data.NextTile );
+					bat.StartAnimation( _actor, data.NextTile );
 				}
 
 				continue;
@@ -193,26 +204,30 @@ public partial class BatchMoveActivity : libblitz.Activity
 
 			if ( Time.Now > data.Part.Time + data.Part.Length )
 			{
-				// if animation should be over...
+				// end animation!
 				data.HasFinished = true;
 
-				if ( data.Tile is IBasicAnimationTile basicAnimationTile )
+				if ( data.Tile is IBasicAnimationTile bat )
 				{
-					basicAnimationTile.EndAnimation( _actor, data.NextTile );
+					bat.EndAnimation( _actor, data.NextTile );
 				}
 
 				_actor.CurrentTile = data.NextTile;
-			}
 
-			if ( !data.HasStarted )
-			{
-				continue;
-			}
-
-			{
-				if ( data.Tile is IBasicAnimationTile basicAnimationTile )
+				if ( _actor.CurrentTile is IActionTile at )
 				{
-					basicAnimationTile.UpdateAnimation( _actor, data.NextTile, data.Progress );
+					at.OnPass( _actor );
+				}
+
+				_completedPlaybackParts++;
+			}
+
+			if ( data.HasStarted )
+			{
+				// update animation!
+				if ( data.Tile is IBasicAnimationTile bat )
+				{
+					bat.UpdateAnimation( _actor, data.NextTile, data.Progress );
 				}
 			}
 		}

@@ -57,7 +57,7 @@ public class MoveControllerActivity : libblitz.Activity
 			case IActivityTile activityTile:
 				// Use tile activity
 				Game.Current.PushActivity( CreateDescription().Transform( activityTile.ActivityName ),
-					new Result() { Moves = _moves } );
+					new IActivityTile.Result() { Moves = _moves, Tile = activityTile } );
 				break;
 			default:
 				Log.Info( "unknown or invalid tile" );
@@ -86,6 +86,11 @@ public class MoveControllerActivity : libblitz.Activity
 
 		if ( expectation.Moves <= 0 )
 		{
+			if ( _actor.CurrentTile is IActionTile at )
+			{
+				at.OnStand( _actor );
+			}
+
 			Log.Info( "MoveControllerActivity complete" );
 		}
 		else

@@ -58,9 +58,5 @@ public partial class WalkTile : BaseTile, IStaticTile, IBasicAnimationTile
 
 	public void EndAnimation( GameMember member, Entity to )
 	{
-		if ( member.Pawn is not BoardPawn pawn )
-		{
-			return;
-		}
 	}
 }

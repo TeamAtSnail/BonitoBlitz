@@ -24,8 +24,6 @@ public class Entrypoint : libblitz.Game
 		Log.Info( $"BonitoBlitz - development version (https://github.com/TeamAtSnail/BonitoBlitz)" );
 		Log.Info(
 			$"Running {(Sandbox.Host.IsClient ? "clientside" : "serverside")} on {DateTime.Now.ToShortDateString()}" );
-
-		_start = BaseTile.FromName( "start" );
 	}
 
 	private BaseTile _start;
@@ -36,6 +34,8 @@ public class Entrypoint : libblitz.Game
 	/// </summary>
 	private void StartGame()
 	{
+		_start = BaseTile.FromName( "start" );
+		
 		foreach ( var member in Members )
 		{
 			var pawn = member.GetOrCreatePawn<BoardPawn>( new object[] { member } );

@@ -15,6 +15,6 @@ public abstract class BaseTile : Entity
 	/// </summary>
 	/// <param name="tileName">Tile name</param>
 	/// <returns>BaseTile or null</returns>
-	public static BaseTile FromName( string tileName ) => Entity.All.OfType<BaseTile>()
+	public static BaseTile FromName( string tileName ) => All.OfType<BaseTile>()
 		.FirstOrDefault( ent => string.Equals( ent.Name, tileName, StringComparison.CurrentCultureIgnoreCase ) );
 }
