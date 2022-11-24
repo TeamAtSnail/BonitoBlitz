@@ -5,99 +5,81 @@
  * part of the BonitoBlitz (w.i.p name) gamemode
  * - lotuspar, 2022 (github.com/lotuspar)
  */
+
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using BonitoBlitz.Activities;
+using BonitoBlitz.Activities.CoreBoard;
+using BonitoBlitz.Entities.CoreBoard;
+using libblitz;
 
 namespace BonitoBlitz;
 
-public partial class Entrypoint : libblitz.Game
+public class Entrypoint : libblitz.Game
 {
 	public Entrypoint()
 	{
 		// Log some game info in console
-		Log.Info( $"BonitoBlitz - development version (https://github.com/lotuspar/BonitoBlitz)" );
-		Log.Info( $"Running {(Sandbox.Host.IsClient ? "clientside" : "serverside")} on {DateTime.Now.ToShortDateString()}" );
+		Log.Info( $"BonitoBlitz - development version (https://github.com/TeamAtSnail/BonitoBlitz)" );
+		Log.Info(
+			$"Running {(Sandbox.Host.IsClient ? "clientside" : "serverside")} on {DateTime.Now.ToShortDateString()}" );
 
-		// Add debug panel
-		if ( Sandbox.Host.IsClient )
-			RootPanel.AddChild<SharedUi.Debug>();
+		_start = BaseTile.FromName( "start" );
 	}
+
+	private BaseTile _start;
 
 	/// <summary>
-	/// Should be called after the libblitz Game is ready to play
-	/// (players should be added and ready)
+	/// Should be called after the Game is ready to play
+	/// (members should be added)
 	/// </summary>
-	public void StartGame()
+	private void StartGame()
 	{
-		// Set game to initial status
-		Status = libblitz.GameStatus.INTRODUCTION_NEEDED;
-
-		// Create activity instances
-		AddActivity( new CoreActivities.MainMenuActivity() );
-		AddActivity( new CoreActivities.Board.BoardActivity() );
-
-		// Set up the game
-		// (placeholder): for now just go to the mainmenu no matter what
-		SetActivityByType<CoreActivities.Board.BoardActivity>();
-	}
-
-	[Sandbox.ConCmd.Server( "bb_popl" )]
-	public static void ForcePopulate()
-	{
-		var entrypoint = Sandbox.Game.Current as Entrypoint;
-		foreach ( var client in Sandbox.Client.All )
+		foreach ( var member in Members )
 		{
-			var player = new libblitz.Player
-			{
-				DisplayName = client.Name
-			};
-			player.SetClient( client );
-			entrypoint.Players.Add( player );
+			var pawn = member.GetOrCreatePawn<BoardPawn>( new object[] { member } );
+			pawn.Position = _start.Position;
+			pawn.GameMember.CurrentTile = _start;
+			member.UsePawn( pawn );
 		}
 
-		var bot = new libblitz.Player
-		{
-			DisplayName = "Flanders",
-			CanBeBot = true,
-		};
+		var description = ActivityDescription.For<TurnProviderActivity>();
+		description.Actors = Members;
+		description.Members = Members;
+		PushActivity<ActivityResult>( description.CreateInstance<TurnProviderActivity>(), null );
+	}
 
-		var bot2 = new libblitz.Player
+	[Sandbox.ConCmd.Server( "bb_populate" )]
+	public static void ForcePopulate()
+	{
+		if ( Sandbox.Game.Current is not Entrypoint entrypoint )
 		{
-			DisplayName = "Bart",
-			CanBeBot = true,
-		};
+			return;
+		}
 
-		entrypoint.Players.Add( bot );
-		entrypoint.Players.Add( bot2 );
+		foreach ( var client in Sandbox.Client.All )
+		{
+			var member = new GameMember { DisplayName = client.Name, ClientIds = new List<long>() { client.PlayerId } };
+			Log.Info( $"New game member: {member}, name {member.DisplayName}" );
+			entrypoint.Members.Add( member );
+			member.UpdateCurrentClient();
+		}
 	}
 
 	[Sandbox.ConCmd.Server( "bb_start" )]
 	public static void ForceStart()
 	{
 		var entrypoint = Sandbox.Game.Current as Entrypoint;
-		entrypoint.StartGame();
+		entrypoint?.StartGame();
 	}
 
-	[Sandbox.ConCmd.Server( "bb_save" )]
-	public static void ForceSave()
+	[Sandbox.ConCmd.Server( "bb_forceroll" )]
+	public static void Test0( int roll )
 	{
 		var entrypoint = Sandbox.Game.Current as Entrypoint;
-		entrypoint.Save();
-		Log.Info( $"> {entrypoint.Uid}" );
-	}
-
-	[Sandbox.ConCmd.Server( "bb_load" )]
-	public static void ForceLoad( string uid )
-	{
-		var entrypoint = Sandbox.Game.Current as Entrypoint;
-
-		entrypoint.Load( Guid.Parse( uid ) );
-
-		// Create activity instances
-		entrypoint.AddActivity( new CoreActivities.MainMenuActivity() );
-		entrypoint.AddActivity( new CoreActivities.Board.BoardActivity() );
-
-		// Set up the game
-		// (placeholder): for now just go to the mainmenu no matter what
-		entrypoint.SetActivityByType<CoreActivities.Board.BoardActivity>();
+		var desc = entrypoint.ActivityStack.Last().Activity.CreateDescription().Transform( "MoveControllerActivity" );
+		entrypoint.PushActivity<DebugPlayerTurnActivity.Result>( desc,
+			new DebugPlayerTurnActivity.Result() { Moves = roll } );
 	}
 }

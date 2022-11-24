@@ -1,8 +1,9 @@
 {
   "Title": "BonitoBlitz",
   "Type": "game",
-  "Org": "local",
+  "Org": "teamsnail",
   "Ident": "gm0",
+  "Tags": "",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
@@ -22,6 +23,7 @@
     "PerMapRanking": false,
     "LeaderboardType": "None",
     "ProjectTemplate": null,
-    "GameCategory": "None"
+    "GameCategory": "None",
+    "ParentPackage": ""
   }
 }
