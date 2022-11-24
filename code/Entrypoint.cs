@@ -79,7 +79,7 @@ public class Entrypoint : libblitz.Game
 	{
 		var entrypoint = Sandbox.Game.Current as Entrypoint;
 		var desc = entrypoint.ActivityStack.Last().Activity.CreateDescription().Transform( "MoveControllerActivity" );
-		entrypoint.PushActivity<DebugPlayerTurnActivity.Result>( desc,
-			new DebugPlayerTurnActivity.Result() { Moves = roll } );
+		entrypoint.PushActivity( desc,
+			new PlayerRollActivity.Result() { Moves = roll } );
 	}
 }
