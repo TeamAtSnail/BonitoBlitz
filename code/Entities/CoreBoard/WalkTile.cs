@@ -29,11 +29,6 @@ public partial class WalkTile : BaseTile, IStaticTile, IBasicAnimationTile
 		// calculate delta...
 		var animationDelta = to.Position - Position;
 
-		// set walking animation
-		pawn.SetAnimParameter( "move_x", animationDelta.x );
-		pawn.SetAnimParameter( "move_y", animationDelta.y );
-		pawn.SetAnimParameter( "move_z", animationDelta.z );
-
 		// calculate end rotation...
 		_endRotation = Rotation.LookAt( to.Position - pawn.Position, Vector3.Up );
 
@@ -54,6 +49,12 @@ public partial class WalkTile : BaseTile, IStaticTile, IBasicAnimationTile
 
 		// set new position
 		pawn.Position = Position + (delta * progress);
+
+		var animationHelper = new CitizenAnimationHelper( pawn );
+		animationHelper.WithVelocity( delta );
+		animationHelper.WithWishVelocity( delta );
+		animationHelper.WithLookAt( to.Position );
+		animationHelper.IsWeaponLowered = true;
 	}
 
 	public void EndAnimation( GameMember member, Entity to )
