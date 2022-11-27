@@ -2,7 +2,6 @@
 using BonitoBlitz.Entities.CoreBoard;
 using libblitz;
 using Sandbox;
-using Game = libblitz.Game;
 
 namespace BonitoBlitz.Activities.CoreBoard;
 

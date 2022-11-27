@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using libblitz;
-using Sandbox;
-using Game = libblitz.Game;
 
 namespace BonitoBlitz.Activities.CoreBoard;
 

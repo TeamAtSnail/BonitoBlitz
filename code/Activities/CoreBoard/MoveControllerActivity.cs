@@ -3,7 +3,6 @@ using System.Linq;
 using BonitoBlitz.Entities.CoreBoard;
 using libblitz;
 using Sandbox;
-using Game = libblitz.Game;
 
 namespace BonitoBlitz.Activities.CoreBoard;
 
@@ -22,7 +21,7 @@ public class MoveControllerActivity : libblitz.Activity
 		/// <summary>
 		/// Moves left
 		/// </summary>
-		public int Moves;
+		public int Moves { get; set; }
 	}
 
 	/// <summary>
@@ -34,7 +33,7 @@ public class MoveControllerActivity : libblitz.Activity
 		/// <summary>
 		/// Moves left
 		/// </summary>
-		public int Moves;
+		public int Moves { get; set; }
 	}
 
 	private GameMember _actor;
@@ -51,7 +50,7 @@ public class MoveControllerActivity : libblitz.Activity
 		{
 			case IStaticTile:
 				// Use BatchMoveActivity
-				Game.Current.PushActivity( CreateDescription().Transform( "BatchMoveActivity" ),
+				Game.Current.PushActivity( CreateDescription().Transform<BatchMoveActivity>(),
 					new Result() { Moves = _moves } );
 				break;
 			case IActivityTile activityTile:
@@ -83,6 +82,19 @@ public class MoveControllerActivity : libblitz.Activity
 		_moves = expectation.Moves;
 
 		Log.Info( $"MoveControllerActivity started with Moves {_moves}" );
+
+		foreach ( var member in Members )
+		{
+			// Make everyone watch this player
+			if ( DynamicCamera.CheckExisting( member.Pawn, _actor.Pawn ) )
+			{
+				continue;
+			}
+
+			member.Pawn?.Components.RemoveAny<CameraMode>();
+			member.Pawn?.Components.Add(
+				new DynamicCamera( _actor.Pawn ) { PrePositionOffset = (Vector3.Up * 150) + (Vector3.Left * 50) } );
+		}
 
 		if ( expectation.Moves <= 0 )
 		{

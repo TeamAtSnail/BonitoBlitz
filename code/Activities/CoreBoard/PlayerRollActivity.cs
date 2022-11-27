@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using BonitoBlitz.Activities.CoreBoard;
+using BonitoBlitz.Entities.CoreBoard;
 using libblitz;
 using Sandbox;
-using Game = libblitz.Game;
 
 namespace BonitoBlitz.Activities.CoreBoard;
 
@@ -34,6 +33,9 @@ public partial class PlayerRollActivity : libblitz.Activity
 		_timer = 0.3f;
 
 		_actor = Actors.First();
+
+		//_actor.Pawn.Components.Add( new StaticCamera(
+			//(StaticCameraSpot)Entity.FindByName( "test" ) ) );
 	}
 
 	public override void Simulate( Client cl )

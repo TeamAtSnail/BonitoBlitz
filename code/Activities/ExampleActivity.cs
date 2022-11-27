@@ -1,6 +1,5 @@
 ﻿using libblitz;
 using Sandbox;
-using Game = libblitz.Game;
 
 namespace BonitoBlitz.Activities;
 
@@ -16,7 +15,7 @@ public class ExampleActivity : libblitz.Activity
 	/// </summary>
 	public class Result : libblitz.ActivityResult
 	{
-		public int MyValue = 123;
+		public int MyValue { get; set; } = 123;
 	}
 
 	/// <summary>
