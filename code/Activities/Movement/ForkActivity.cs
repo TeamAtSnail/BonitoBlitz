@@ -28,6 +28,14 @@ public partial class ForkActivity : Activity
 		// Make sure we use BoardPawn
 		_actor.UseOrCreatePawn<BoardPawn>();
 
+		// Make everyone look at the actor
+		foreach ( var member in Members )
+		{
+			var camera = CameraComponent.AddNewOrGet( member.Pawn );
+			camera.LookAtEntity( _actor.Pawn );
+			camera.PrePositionOffset = (Vector3.Left * 180) + (Vector3.Up * 60);
+		}
+
 		if ( result is not MoveHostActivity.Result moveHostResult )
 		{
 			throw new UnexpectedActivityResultException( "ForkActivity requires a MoveHostActivity.Result" );
@@ -37,6 +45,9 @@ public partial class ForkActivity : Activity
 		{
 			throw new Exception( "Provided tile in ActivityResult not a ForkTile" );
 		}
+
+		// Set actor current tile to provided one (just in case the game restarts or something)
+		_actor.CurrentTile = moveHostResult.Tile;
 
 		// Set expected moves
 		_movesExpected = moveHostResult.Moves;
@@ -89,6 +100,19 @@ public partial class ForkActivity : Activity
 			{
 				MovesExpected = _movesExpected, MovesPerformed = 1,
 			} );
+		}
+	}
+
+	private float _rotation = 0.0f;
+
+	public override void FrameSimulate( Client cl )
+	{
+		base.FrameSimulate( cl );
+
+		if ( NextTile != null )
+		{
+			DebugOverlay.Circle( NextTile.Position, Rotation.Identity, _rotation, Color.Green );
+			DebugOverlay.Text( NextTile.Name, NextTile.Position, Color.Cyan );
 		}
 	}
 }

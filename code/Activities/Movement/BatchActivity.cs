@@ -131,12 +131,23 @@ public partial class BatchActivity : Activity
 		// Make sure we use BoardPawn
 		_actor.UseOrCreatePawn<BoardPawn>();
 
+		// Make everyone look at the actor
+		foreach ( var member in Members )
+		{
+			var camera = CameraComponent.AddNewOrGet( member.Pawn );
+			camera.LookAtEntity( _actor.Pawn );
+			camera.PrePositionOffset = (Vector3.Left * 180) + (Vector3.Up * 60);
+		}
+
 		// Make sure we got the right ActivityResult
 		if ( result is not MoveHostActivity.Result moveHostResult )
 		{
 			throw new UnexpectedActivityResultException( "BatchActivity requires a MoveHostActivity.Result" );
 		}
 
+		// Set actor current tile to provided one (just in case the game restarts or something)
+		_actor.CurrentTile = moveHostResult.Tile;
+		
 		_movesExpected = moveHostResult.Moves;
 
 		var tile = _actor.CurrentTile;

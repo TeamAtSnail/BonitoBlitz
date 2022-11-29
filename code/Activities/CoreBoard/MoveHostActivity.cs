@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
 using BonitoBlitz.Entities.CoreBoard;
 using libblitz;
-using Sandbox;
 
 namespace BonitoBlitz.Activities.CoreBoard;
 
@@ -20,7 +19,7 @@ public partial class MoveHostActivity : Activity
 		public int Moves { get; set; }
 		public string TileName { get; set; }
 
-		public BaseTile Tile => BaseTile.FromName( TileName );
+		[JsonIgnore] public BaseTile Tile => BaseTile.FromName( TileName );
 	}
 
 	/// <summary>
@@ -86,7 +85,7 @@ public partial class MoveHostActivity : Activity
 					// Use BatchActivity
 					LogInfo( "-> BatchActivity" );
 					Game.Current.PushActivity( CreateDescription().Transform<Movement.BatchActivity>(),
-						new Result() { Moves = moves.Value } );
+						new Result { Moves = moves.Value, TileName = currentTile.Name } );
 					return;
 				case IActivityTile at:
 					// Use tile activity
