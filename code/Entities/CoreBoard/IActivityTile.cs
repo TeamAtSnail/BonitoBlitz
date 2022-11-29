@@ -9,8 +9,4 @@ public interface IActivityTile
 {
 	public string ActivityName { get; set; }
 
-	public class Result : MoveControllerActivity.Result
-	{
-		public IActivityTile Tile;
-	}
 }
