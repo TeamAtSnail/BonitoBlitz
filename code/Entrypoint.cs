@@ -66,6 +66,15 @@ public class Entrypoint : libblitz.Game
 	{
 		var entrypoint = Sandbox.Game.Current as Entrypoint;
 		entrypoint!.SavePersistent( entrypoint.Uid );
+		Log.Info( $"Saved, UID: {entrypoint.Uid}" );
+		Log.Info( $"Use bb_load <uid> or bb_loadlast" );
+	}
+
+	[Sandbox.ConCmd.Server( "bb_loadlast" )]
+	public static void TestLoadLast()
+	{
+		var entrypoint = Sandbox.Game.Current as Entrypoint;
+		entrypoint!.LoadPersistent( entrypoint.Uid );
 	}
 
 	[Sandbox.ConCmd.Server( "bb_load" )]
