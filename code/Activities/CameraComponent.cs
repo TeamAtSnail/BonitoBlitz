@@ -22,7 +22,7 @@ public partial class CameraComponent : CameraMode
 	[Net] public Vector3 PostPositionOffset { get; set; }
 	[Net] public Rotation RotationOffset { get; set; }
 
-	private const float LerpSpeed = 9.0f;
+	private const float LerpSpeed = 5.0f;
 
 	public override void Update()
 	{
@@ -80,6 +80,14 @@ public partial class CameraComponent : CameraMode
 		ResetOffsets();
 		Type = CameraType.LookFromEntity;
 		TargetEntity = entity;
+	}
+
+	public override void Activated()
+	{
+		base.Activated();
+
+		Position = Map.Camera.Position;
+		Rotation = Map.Camera.Rotation;
 	}
 
 	/// <summary>
