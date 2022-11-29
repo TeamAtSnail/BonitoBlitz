@@ -35,7 +35,8 @@ public partial class DiceRollActivity : Activity
 		// Make everyone look at the actor
 		foreach ( var member in Members )
 		{
-			var camera = DynamicCamera.AddOrGet( member.Pawn, _actor.Pawn );
+			var camera = CameraComponent.AddNewOrGet( member.Pawn );
+			camera.LookAtEntity( _actor.Pawn );
 			camera.PrePositionOffset = (Vector3.Left * 200) + (Vector3.Up * 30);
 		}
 	}

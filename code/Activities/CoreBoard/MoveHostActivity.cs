@@ -60,7 +60,8 @@ public partial class MoveHostActivity : Activity
 		// Make everyone look at the actor
 		foreach ( var member in Members )
 		{
-			var camera = DynamicCamera.AddOrGet( member.Pawn, actor.Pawn );
+			var camera = CameraComponent.AddNewOrGet( member.Pawn );
+			camera.LookAtEntity( actor.Pawn );
 			camera.PrePositionOffset = (Vector3.Left * 180) + (Vector3.Up * 60);
 		}
 
