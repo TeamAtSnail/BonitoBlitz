@@ -6,7 +6,7 @@ using SandboxEditor;
 namespace BonitoBlitz.Entities.CoreBoard;
 
 [Library( "bb_tile_coin" ), HammerEntity]
-[Title( "Coin Tile" ), Category( "Player" ), Icon( "place" )]
+[Title( "Coin Tile" ), Category( "Tile" ), Icon( "place" )]
 [Description( "Tile that gives out coins when standing on it" )]
 public partial class CoinTile : WalkTile, IStaticTile, IBasicAnimationTile, IActionTile
 {

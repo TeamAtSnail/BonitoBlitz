@@ -6,7 +6,7 @@ using SandboxEditor;
 namespace BonitoBlitz.Entities.CoreBoard;
 
 [Library( "bb_tile_walk" ), HammerEntity]
-[Title( "Walk Tile" ), Category( "Player" ), Icon( "place" )]
+[Title( "Walk Tile" ), Category( "Tile" ), Icon( "place" )]
 [Description( "Tile for players to walk over" )]
 public partial class WalkTile : BaseTile, IStaticTile, IBasicAnimationTile
 {
